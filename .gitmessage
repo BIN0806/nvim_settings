@@ -1,0 +1,18 @@
+settings: <concrete behavior or capability>
+
+Profile: cpp / full / both
+What and why:
+-
+
+How to use / key changes:
+-
+
+Validation actually run:
+-
+
+Restore / compatibility notes:
+-
+
+Update CHANGELOG.md in the same commit. Use an immutable annotated tag for a
+checkpoint worth restoring. Do not put credentials, transcripts or local state
+in a settings commit.

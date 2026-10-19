@@ -1,0 +1,22 @@
+# Local state, generated outputs and credentials
+.DS_Store
+*.log
+*.swp
+*.swo
+*~
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+node_modules/
+backups/
+example/build/
+compile_commands.json
+verification/*.json
+agentic/installation.json
+agentic/toolchain/
+.agent-notes/
+.no-mistakes/
+.claude/
+.codex/
