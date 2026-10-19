@@ -13,6 +13,6 @@ Validation actually run:
 Restore / compatibility notes:
 -
 
-Update Documentation.md's Change log in the same commit. Use an annotated tag for a
+Update README.md's Change log in the same commit. Use an annotated tag for a
 checkpoint worth restoring. Do not put credentials, transcripts or local state
 in a settings commit.

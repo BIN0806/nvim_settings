@@ -23,7 +23,7 @@ def visible_lines(text):
         if fence is None:
             yield line
     if fence is not None:
-        raise ValueError("Documentation.md contains an unclosed code fence")
+        raise ValueError("README.md contains an unclosed code fence")
 
 
 def anchors(text):
@@ -39,7 +39,7 @@ def anchors(text):
 
 
 def main():
-    document = ROOT / "Documentation.md"
+    document = ROOT / "README.md"
     text = document.read_text()
     lines = list(visible_lines(text))
     ids = anchors(text)
@@ -61,9 +61,9 @@ def main():
         ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT
     ).decode().split("\0")
     extra = sorted({path for path in paths if path.endswith(".md") and (ROOT / path).is_file()
-                    and path not in {"Documentation.md", "AGENTS.md"}})
+                    and path not in {"README.md", "AGENTS.md"}})
     if extra:
-        raise ValueError("Merge user documentation into Documentation.md: " + ", ".join(extra))
+        raise ValueError("Merge user documentation into README.md: " + ", ".join(extra))
     print(f"PASS: one user guide, {len(top)} categories, unique headings and working local links/anchors")
 
 

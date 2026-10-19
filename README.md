@@ -966,25 +966,26 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `setup-2026-10-18-merged` | Combined editor/tmux checkpoint before Kun integration. |
 | `setup-2026-10-19-cursor` | Full profile with terminal cursor animation and compatible Magicalbat additions. |
 | `setup-2026-10-18-full` | Full profile including optional Kun/Codex launcher sources and instructions. |
-| `setup-2026-10-19-documentation` | The same full feature profile with this unified documentation and migrated history checks. |
+| `setup-2026-10-19-documentation` | The full profile with the unified guide named Documentation.md and migrated history checks. |
+| `setup-2026-10-19-readme` | Current full profile with the unified guide displayed as README.md on GitHub. |
 
 The initial commits package saved, tested milestones in order. Tags pin exact
 snapshots; profile branches can receive compatible updates. The smaller C++
 branch and old tags retain their historical files, including earlier guide names.
-The current main profile uses this one Documentation.md.
+The current main profile uses this one README.md.
 
 ### Inspect settings history
 
 ```sh
 git log --graph --decorate --oneline --all
-git log --format=fuller -- Documentation.md
+git log --follow --format=fuller -- README.md
 # Older entries before consolidation:
 git log --format=fuller -- CHANGELOG.md
 git show setup-2026-10-18-full
 git diff setup-2026-10-18-cpp..setup-2026-10-18-full -- lua lazy-lock.json
 ```
 
-The commit bodies and Documentation.md describe features, key changes, validation and
+The commit bodies and README.md describe features, key changes, validation and
 restore points. Saved setup milestones were packaged in order on October 18,
 2026; their commit times are packaging times, not the original edit times.
 
@@ -1044,7 +1045,7 @@ git switch main
 git switch -c codex/profile-writing
 ```
 
-Remove/change the relevant features, update profile.json and Documentation.md, check
+Remove/change the relevant features, update profile.json and README.md, check
 it, commit, and push with `git push -u origin HEAD`. Use a separate clone and
 NVIM_APPNAME such as `nvim-billy-writing` to try it. A different color choice
 alone usually does not need a permanent branch; a checkpoint tag can be enough.
@@ -1434,7 +1435,7 @@ git config core.hooksPath .githooks
 git config commit.template .gitmessage
 ```
 
-The pre-commit hook requires a staged Documentation.md update when Neovim, tmux,
+The pre-commit hook requires a staged README.md update when Neovim, tmux,
 plugin locks, profile metadata or agentic settings change. Git does not enable
 hooks automatically in a fresh clone. The hook checks that this file is staged;
 you still need to write a useful dated log entry. It makes no model/network call.
@@ -1444,10 +1445,10 @@ For an experimental change:
 ```sh
 git switch main
 git switch -c codex/improve-search
-# Edit the intended settings and add a dated Change log entry in Documentation.md.
+# Edit the intended settings and add a dated Change log entry in README.md.
 python3 scripts/check.py
 git diff
-git add lua/mappings.lua Documentation.md
+git add lua/mappings.lua README.md
 git diff --cached
 git commit
 git push -u origin HEAD
@@ -1611,7 +1612,7 @@ Packaging verification passed:
 - Python helper sources and JSON profile/toolchain/plugin records parse.
 - A real disposable Git repository demonstrated the then-current pre-commit
   requirement for CHANGELOG.md. The consolidation subsequently migrated and
-  reverified that requirement for this file, Documentation.md.
+  reverified that requirement for this file, README.md.
 - Repository Markdown file links resolve; the final stack remains the handbook's
   last section.
 - The packaged files were checked for the original user-specific paths, private
@@ -1619,7 +1620,7 @@ Packaging verification passed:
   records, local state, backups, binaries and transcript downloads are excluded.
 
 The C++ and merged checkpoints come from saved milestones, as explained in
-Documentation.md. They are not represented as newly rerun full runtime suites. The
+README.md. They are not represented as newly rerun full runtime suites. The
 export introduced documentation/history tooling and preserved the active runtime
 settings, so no additional paid agent call was made for packaging.
 
@@ -1673,6 +1674,21 @@ required for a small documentation edit. Results/logs are ignored local files.
 Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
+
+### 2026-10-19 — display the guide on the GitHub homepage
+
+- **Profile/checkpoint:** full; `setup-2026-10-19-readme`.
+- **Changed/why:** rename Documentation.md to README.md so GitHub shows the
+  complete categorized guide on the repository homepage. Keep the same content
+  and navigation, with a dated entry for this rename.
+- **Use:** open the repository homepage or README.md. Future settings changes
+  update the Change log in README.md; the hook, commit template, agent pointers
+  and missing-Kun help now refer to that filename.
+- **Validation:** document links/anchors and single-guide policy; Python/JSON and
+  all 13 Lua files parse; history hook tested with staged settings and README.md;
+  active/source/export helper parity checked. No model request.
+- **Restore:** `setup-2026-10-19-documentation` keeps the previous filename.
+  Editor features, shortcuts and older profile/tag history are preserved.
 
 ### 2026-10-19 — one categorized Documentation.md
 
@@ -1943,7 +1959,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 
 | Item | Where to find it |
 | --- | --- |
-| This guide and change log | Documentation.md in the settings repository |
+| This guide and change log | README.md in the settings repository |
 | Neovim configuration | init.lua, lua/, lazy-lock.json and .stylua.toml |
 | Profile metadata | profile.json |
 | Optional tmux settings | tmux.conf, installed separately as ~/.tmux.conf |
@@ -1952,7 +1968,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Current full-profile checkpoint | setup-2026-10-19-documentation |
+| Current full-profile checkpoint | setup-2026-10-19-readme |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not
