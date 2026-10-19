@@ -60,6 +60,14 @@ function M.lazygit()
   M.terminal(vim.fn.shellescape(vim.fn.exepath "lazygit"), nil, "float")
 end
 
+function M.kun()
+  local binary = vim.fn.expand "~/.local/bin/kun"
+  if vim.fn.executable(binary) ~= 1 then
+    return vim.notify("Kun launcher is missing; see agentic/README.md", vim.log.levels.WARN)
+  end
+  M.terminal(vim.fn.shellescape(binary) .. " start --project " .. vim.fn.shellescape(M.root()))
+end
+
 function M.task_note()
   local path = M.root() .. "/.agent-notes/task.md"
   if vim.fn.filereadable(path) == 0 then

@@ -86,6 +86,9 @@ map("n", "<leader>gH", "<cmd>DiffviewFileHistory %<CR>", { desc = "Current file 
 map("n", "<leader>aa", function()
   require("configs.workspace").agent()
 end, { desc = "Choose coding agent" })
+map("n", "<leader>ak", function()
+  require("configs.workspace").kun()
+end, { desc = "Open Kun project workflow (Codex)" })
 map("n", "<leader>ac", function()
   require("configs.workspace").agent "Codex"
 end, { desc = "Open Codex" })

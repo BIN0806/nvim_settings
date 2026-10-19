@@ -1,6 +1,10 @@
 {
   "name": "full",
-  "checkpoint": "setup-2026-10-18-merged",
+  "checkpoint": "setup-2026-10-18-full",
   "neovim": "0.12.6",
-  "agentic_installed_by_config": false
+  "default_assistant": "codex",
+  "agentic_installed_by_config": false,
+  "optional_features": [
+    "kun"
+  ]
 }

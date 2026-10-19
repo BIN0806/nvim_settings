@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.20)
+project(nvim_cpp_demo LANGUAGES CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_executable(app src/main.cpp)
+target_compile_features(app PRIVATE cxx_std_23)
+target_compile_options(app PRIVATE -Wall -Wextra -Wpedantic)

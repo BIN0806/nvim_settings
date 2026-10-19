@@ -1,0 +1,29 @@
+{
+  "firstmate": {
+    "commit": "45dd50a5e12bc3f5e009a4e18fa35ce7f7a71681",
+    "source": "https://github.com/kunchenguid/firstmate"
+  },
+  "treehouse": {
+    "version": "v3.1.4",
+    "archive": "treehouse-v3.1.4-darwin-arm64.tar.gz",
+    "sha256": "dd59e3c10549a565d68cd8e98f477c41361678b9f95abc7f1e0fc53bb43587ea",
+    "source": "https://github.com/kunchenguid/treehouse/releases/download/v3.1.4"
+  },
+  "no-mistakes": {
+    "version": "v1.84.0",
+    "archive": "no-mistakes-v1.84.0-darwin-arm64.tar.gz",
+    "sha256": "2e5f838303ab727edccd1a60a4834068024606c68ae7d97fdc0fdeecd7bd4d90",
+    "source": "https://github.com/kunchenguid/no-mistakes/releases/download/v1.84.0"
+  },
+  "npm_packages": {
+    "gh-axi": "0.1.43",
+    "chrome-devtools-axi": "0.1.44",
+    "tasks-axi": "0.2.6",
+    "quota-axi": "0.1.64",
+    "lavish-axi": "0.1.90"
+  },
+  "integration_overlays": {
+    "bin/fm-spawn.sh": "Absolute private permission-adapter paths for supported worker harnesses",
+    "bin/fm-bootstrap.sh": "Skip routine fleet sync for registered source checkouts"
+  }
+}
