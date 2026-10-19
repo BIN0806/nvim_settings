@@ -146,3 +146,11 @@ Tests and evidence are described in [verification/summary.md](verification/summa
 Original runtime checks used disposable fixtures and did not push a user project
 or use model quota. Repository packaging preserves the selected configuration
 files and normalizes documentation/test paths for use from a clone.
+
+## Magicalbat/Configs integration — October 19, 2026
+
+The published source has no cursor-animation plugin. The full profile adds a
+terminal cursor-trail substitute and compatible mappings, while preserving the
+working theme, pair engine, LSP/Treesitter APIs and tmux navigation. MATLAB syntax
+is additive. [The detailed guide](MAGICALBAT-MERGE.md) records all conflicts,
+existing equivalents, usage and pinned source revisions.

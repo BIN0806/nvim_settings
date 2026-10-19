@@ -115,3 +115,20 @@ The C++ and merged checkpoints come from saved milestones, as explained in
 CHANGELOG.md. They are not represented as newly rerun full runtime suites. The
 export introduced documentation/history tooling and preserved the active runtime
 settings, so no additional paid agent call was made for packaging.
+
+## Magicalbat merge — October 19, 2026
+
+Five additional runtime checks passed in a terminal Neovim instance:
+
+- The real pinned cursor plugin loads with typing/terminal/command-line effects off.
+- Space u c disables and re-enables it.
+- Cursor movement creates smear-cursor renderer frames without changing text.
+- Visual J/K move selected lines and Visual p preserves the copied register.
+- Ctrl+Arrow resize works; help, tmux navigation, source/header and debugger keys survive.
+
+The MATLAB syntax parser compiled, installed and parsed a real function without
+syntax errors. A Neovide-mode launch skipped the terminal renderer. All 13 Lua settings
+files and the Python/JSON records parse. Exported settings match the active files;
+document links resolve. Earlier C++/language/tmux checks above are prior recorded
+results, not newly rerun suites. No model calls were made. This verifies renderer
+activity, not an exact visual match to an unidentified video/GUI animation.

@@ -2,6 +2,7 @@
 
 Use **main** for the full daily setup. Use **codex/profile-cpp** for the smaller
 working C++ profile. Each branch contains an installable config at its root.
+The current cursor/settings checkpoint is `setup-2026-10-19-cursor`.
 The tags listed in README are immutable checkpoints, while profile branches can
 advance with intentional updates. `profile.json` identifies the current profile.
 

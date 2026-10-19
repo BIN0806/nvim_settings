@@ -1,10 +1,11 @@
 {
   "name": "full",
-  "checkpoint": "setup-2026-10-18-full",
+  "checkpoint": "setup-2026-10-19-cursor",
   "neovim": "0.12.6",
   "default_assistant": "codex",
   "agentic_installed_by_config": false,
   "optional_features": [
-    "kun"
+    "kun",
+    "cursor-trail"
   ]
 }

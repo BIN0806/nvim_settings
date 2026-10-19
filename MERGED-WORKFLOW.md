@@ -443,3 +443,11 @@ C++, inspect and stage Git changes, save editor layouts, keep persistent termina
 workspaces, collaborate with several installed coding assistants, and isolate
 parallel tasks. The detailed compatibility guide explains which optional systems
 have deliberately not been activated and the substitutes available now.
+
+## Cursor motion and Magicalbat additions
+
+Restart Neovim, then try Normal-mode jumps such as gg/G or a search. Space u c
+toggles the cursor trail. Ctrl+Arrow resizes splits; Visual J/K moves selected
+lines; Visual p preserves copied text. Space f g finds Git files, Space f r
+searches text, and F2/F4 provide rename/code-action aliases. MATLAB has syntax
+support. [Read the complete conflict and usage guide](MAGICALBAT-MERGE.md).

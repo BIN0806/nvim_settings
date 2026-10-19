@@ -43,6 +43,7 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `codex/profile-cpp` | Smaller tested C++ profile: NvChad, clangd, formatting and CodeLLDB; no extra agentic layer. |
 | `setup-2026-10-18-cpp` | Immutable C++ foundation checkpoint. |
 | `setup-2026-10-18-merged` | Combined editor/tmux checkpoint before Kun integration. |
+| `setup-2026-10-19-cursor` | Full profile with terminal cursor animation and compatible Magicalbat additions. |
 | `setup-2026-10-18-full` | Full profile including optional Kun/Codex launcher sources and instructions. |
 
 The initial commits package real saved milestones from the original setup.
@@ -178,3 +179,10 @@ The NvChad starter's original public-domain license is retained. Plugin and
 external-tool licenses remain with their projects; installed dependencies are
 not vendored here. Tutorial authors and source repositories are linked in the
 handbook. Captions, personal transcripts and local backups are not uploaded.
+
+## Magicalbat cursor and settings merge
+
+October 19: the full profile now has a terminal cursor trail (Space u c), compatible
+resize/selection/search/LSP shortcuts and MATLAB syntax. Restart Neovim to load it.
+[The merge guide](MAGICALBAT-MERGE.md) explains additions, source limitations and
+conflicts. The previous full setup remains at setup-2026-10-18-full.

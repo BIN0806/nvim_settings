@@ -368,3 +368,11 @@ This repository's root is your configuration. README.md explains installation
 and updates; PROFILES.md explains profile/version restoration; the timestamped
 C++ tutorial comparison is in video-checklist.md. The documented example path
 assumes a clone at ~/.config/nvim-billy.
+
+## Cursor motion and Magicalbat additions
+
+Restart Neovim, then try Normal-mode jumps such as gg/G or a search. Space u c
+toggles the cursor trail. Ctrl+Arrow resizes splits; Visual J/K moves selected
+lines; Visual p preserves copied text. Space f g finds Git files, Space f r
+searches text, and F2/F4 provide rename/code-action aliases. MATLAB has syntax
+support. [Read the complete conflict and usage guide](MAGICALBAT-MERGE.md).

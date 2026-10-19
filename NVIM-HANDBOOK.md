@@ -3,7 +3,7 @@
 > Repository edition: examples assume a clone at `~/.config/nvim-billy`.
 > Run it with `NVIM_APPNAME=nvim-billy nvim`; see README.md and PROFILES.md.
 
-**Installed setup snapshot: October 18, 2026.** This is the single reference for
+**Updated setup snapshot: October 19, 2026.** This is the single reference for
 what each tutorial contributes, how those ideas fit together, how to use the
 combined environment, and exactly what your final stack contains. It assumes you
 have not watched the tutorials. Tools are marked as installed, substituted or
@@ -270,6 +270,24 @@ checkouts during startup.
 Sources: [Firstmate](https://github.com/kunchenguid/firstmate),
 [Treehouse](https://github.com/kunchenguid/treehouse),
 [No Mistakes](https://github.com/kunchenguid/no-mistakes).
+
+### Additional source — Magicalbat settings and cursor motion
+
+[Magicalbat/Configs](https://github.com/Magicalbat/Configs) was reviewed on October
+19, 2026. Its published config contains no cursor-animation settings. Your full
+profile adds a terminal cursor-trail substitute with Space u c to toggle, plus
+compatible Ctrl+Arrow resize, Visual J/K line movement, register-preserving paste,
+Git-file/search keys, F2/F4 aliases and MATLAB syntax support. Restart Neovim to
+load these additions. Native C++ debugging, help keys and tmux navigation remain.
+
+Read [MAGICALBAT-MERGE.md](MAGICALBAT-MERGE.md) for every added action, exact source
+revisions, conflicts and retained equivalents. The main conflicts are duplicate
+pairing/LSP/theme setup, an older Treesitter API, a hidden-file shortcut that
+would replace help, and tmux bindings that would interfere with current navigation.
+The source's GUI font does not identify the animation used in a video.
+
+**You gain:** an animated cursor in your existing terminal workflow, extra
+selection/window controls, and a documented way to turn motion off.
 
 ## How the tools fit together
 
@@ -611,6 +629,7 @@ together, copy terminal output, and recover terminal layouts after a restart.
 | Action | Keys |
 | --- | --- |
 | Open the Kun project workflow (Codex) | Space a k |
+| Toggle animated cursor trail | Space u c |
 | Choose an installed coding assistant | Space a a |
 | Open Codex | Space a c |
 | Open Claude Code | Space a C |
@@ -905,6 +924,7 @@ contains exact plugin commits.
 | Full Git terminal interface | LazyGit |
 | Focus view | zen-mode.nvim |
 | Indent guides/icons | indent-blankline.nvim + nvim-web-devicons |
+| Cursor motion | smear-cursor.nvim terminal trail; Space u c toggle; typing/tool panes quiet; Neovide skipped |
 | Reading conveniences | Relative lines, centered movement, yank feedback, restored position, open-by-default folds, Markdown wrap/spell |
 | External file changes | Guarded checktime with autoread for unmodified buffers |
 
@@ -919,7 +939,7 @@ contains exact plugin commits.
 | Bash/sh | bash-language-server + ShellCheck | shfmt | Not configured |
 | JSON/JSONC | vscode-json-language-server | Prettier | Not configured |
 | HTML/CSS/YAML/Markdown | Syntax parsers | Prettier | Not configured |
-| TOML/CMake | Syntax parsers | No dedicated formatter configured | Not configured |
+| TOML/CMake/MATLAB | Syntax parsers | No dedicated formatter configured | Not configured |
 
 The C/C++ debugger stack is **nvim-dap + mason-nvim-dap + nvim-dap-ui + nvim-nio
 and CodeLLDB**, with extra adapter startup allowance for macOS. CMake, Ninja and
@@ -928,7 +948,7 @@ language SDKs remain separate from these editor tools.
 
 Configured parser inventory: **c, cpp, lua, luadoc, vim, vimdoc, query, cmake,
 bash, json, markdown, markdown_inline, python, javascript, typescript, tsx, html,
-css, yaml, toml**. Some related file types reuse a parser rather than having a
+css, yaml, toml, matlab**. Some related file types reuse a parser rather than having a
 separately named grammar.
 
 ### Workspace and agent layer
@@ -969,5 +989,5 @@ cmp_luasnip, conform.nvim, diffview.nvim, friendly-snippets, gitsigns.nvim,
 indent-blankline.nvim, lazy.nvim, mason-nvim-dap.nvim, mason.nvim, menu, mini.nvim,
 minty, nvim-autopairs, nvim-cmp, nvim-dap, nvim-dap-ui, nvim-lspconfig, nvim-nio,
 nvim-tree.lua, nvim-treesitter, nvim-web-devicons, plenary.nvim, telescope.nvim, ui,
-vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
+smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 ```

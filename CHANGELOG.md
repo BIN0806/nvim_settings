@@ -4,6 +4,28 @@ Each settings commit records what changed, why, usage changes, verification and
 the checkpoint to restore. These initial commits package saved, tested milestones
 from October 18, 2026; they are not an invented original development timeline.
 
+## 2026-10-19 — Magicalbat merge and cursor animation
+
+- **Profile/checkpoint:** full; `setup-2026-10-19-cursor`. The smaller C++ branch stays unchanged.
+- **Source reviewed:** Magicalbat/Configs at `14e1f6c5821f9c15e1805f1dc929c227c484d9ae`.
+  That source contains no cursor-animation configuration; the requested effect
+  is supplied with a documented terminal substitute, smear-cursor.nvim, locked
+  at `f6cb57c342268177f719acc3968b9d8de3ecc969`.
+- **Added:** Space u c cursor-trail toggle; Ctrl+Arrow resize; Visual J/K line
+  moves and register-preserving p; Git-file/search shortcuts; F2/F4 LSP aliases;
+  MATLAB syntax parser, without a MATLAB SDK/server/debugger.
+- **Compatibility:** retain NvChad/Catppuccin, current LSP/Treesitter APIs,
+  nvim-autopairs, completion sources, help key, debugger and Ctrl+s tmux workflow.
+  Cursor animation is quiet during typing/terminal/command-line use and selected
+  tool buffers; it skips Neovide. Full decisions are in MAGICALBAT-MERGE.md.
+- **Validation:** five real Neovim runtime checks passed (including renderer
+  frames, toggle, text/register behavior and surviving keys); MATLAB parser
+  compiles/loads; Lua/Python/JSON syntax and document-link checks pass. No model
+  request or application-project changes were made.
+- **Restore:** `setup-2026-10-18-full` is the previous full setup. Space u c
+  disables animation immediately; `enabled = false` in configs/cursor.lua sets
+  the startup preference. A pre-change backup is preserved on the original machine.
+
 ## 2026-10-18 — full profile and project-scoped Codex workflow
 
 - **Checkpoint:** `setup-2026-10-18-full`; maintained branch `main`.

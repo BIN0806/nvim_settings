@@ -60,6 +60,7 @@ return {
         "css",
         "yaml",
         "toml",
+        "matlab",
       },
     },
     config = function()
@@ -214,5 +215,18 @@ return {
     "folke/zen-mode.nvim",
     cmd = "ZenMode",
     opts = { window = { width = 100 }, plugins = { tmux = { enabled = false } } },
+  },
+  {
+    "sphamba/smear-cursor.nvim",
+    main = "smear_cursor",
+    event = "VeryLazy",
+    cond = function()
+      return not vim.g.neovide
+    end,
+    opts = require "configs.cursor",
+    cmd = "SmearCursorToggle",
+    keys = {
+      { "<leader>uc", "<cmd>SmearCursorToggle<CR>", desc = "Toggle animated cursor trail" },
+    },
   },
 }
