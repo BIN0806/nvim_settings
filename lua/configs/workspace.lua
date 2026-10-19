@@ -63,7 +63,7 @@ end
 function M.kun()
   local binary = vim.fn.expand "~/.local/bin/kun"
   if vim.fn.executable(binary) ~= 1 then
-    return vim.notify("Kun launcher is missing; see agentic/README.md", vim.log.levels.WARN)
+    return vim.notify("Kun launcher is missing; see Documentation.md (Coding with Codex and Kun)", vim.log.levels.WARN)
   end
   M.terminal(vim.fn.shellescape(binary) .. " start --project " .. vim.fn.shellescape(M.root()))
 end

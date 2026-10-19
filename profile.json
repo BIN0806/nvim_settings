@@ -1,6 +1,6 @@
 {
   "name": "full",
-  "checkpoint": "setup-2026-10-19-cursor",
+  "checkpoint": "setup-2026-10-19-documentation",
   "neovim": "0.12.6",
   "default_assistant": "codex",
   "agentic_installed_by_config": false,

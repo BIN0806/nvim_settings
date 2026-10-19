@@ -14,6 +14,7 @@ for path in (ROOT / "scripts").glob("*.py"):
 for relative in ("lazy-lock.json", "profile.json", "agentic/toolchain-lock.json"):
     json.loads((ROOT / relative).read_text())
 print("PASS: Python sources and JSON records parse", flush=True)
+subprocess.run([shutil.which("python3") or "python3", str(ROOT / "scripts/check_documentation.py")], cwd=ROOT, check=True)
 if not shutil.which("nvim"):
     raise SystemExit("Install Neovim before checking Lua settings")
 subprocess.run(["nvim", "--headless", "-u", "NONE", "-i", "NONE", "-n", "-l", str(ROOT / "scripts/check.lua")], cwd=ROOT, check=True)
