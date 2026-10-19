@@ -1,6 +1,6 @@
 {
-  "name": "cpp",
-  "checkpoint": "setup-2026-10-18-cpp",
+  "name": "full",
+  "checkpoint": "setup-2026-10-18-merged",
   "neovim": "0.12.6",
   "agentic_installed_by_config": false
 }

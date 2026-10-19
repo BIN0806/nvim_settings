@@ -11,7 +11,21 @@ return {
     "mason-org/mason.nvim",
     opts = {
       PATH = "prepend",
-      ensure_installed = { "clangd", "clang-format", "codelldb", "lua-language-server", "stylua" },
+      ensure_installed = {
+        "clangd",
+        "clang-format",
+        "codelldb",
+        "lua-language-server",
+        "stylua",
+        "pyright",
+        "ruff",
+        "typescript-language-server",
+        "prettier",
+        "bash-language-server",
+        "shellcheck",
+        "shfmt",
+        "json-lsp",
+      },
     },
   },
   {
@@ -38,6 +52,14 @@ return {
         "json",
         "markdown",
         "markdown_inline",
+        "python",
+        "javascript",
+        "typescript",
+        "tsx",
+        "html",
+        "css",
+        "yaml",
+        "toml",
       },
     },
     config = function()
@@ -155,5 +177,42 @@ return {
   {
     "christoomey/vim-tmux-navigator",
     cmd = { "TmuxNavigateLeft", "TmuxNavigateDown", "TmuxNavigateUp", "TmuxNavigateRight", "TmuxNavigatePrevious" },
+  },
+  {
+    "nvim-mini/mini.nvim",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("mini.ai").setup { n_lines = 500 }
+      require("mini.surround").setup {}
+      require("mini.move").setup {
+        mappings = {
+          left = "<leader>mh",
+          right = "<leader>ml",
+          down = "<leader>mj",
+          up = "<leader>mk",
+          line_left = "<leader>mh",
+          line_right = "<leader>ml",
+          line_down = "<leader>mj",
+          line_up = "<leader>mk",
+        },
+      }
+      require("mini.sessions").setup {
+        autoread = false,
+        autowrite = false,
+        directory = vim.fn.stdpath "state" .. "/sessions",
+        file = "",
+      }
+    end,
+  },
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+  {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    opts = { window = { width = 100 }, plugins = { tmux = { enabled = false } } },
   },
 }

@@ -33,3 +33,74 @@ map("n", "<leader>uf", function()
   vim.b.disable_autoformat = not vim.b.disable_autoformat
   vim.notify("Format on save: " .. (vim.b.disable_autoformat and "off" or "on"))
 end, { desc = "Toggle format on save for buffer" })
+
+for lhs, rhs in pairs { ["<C-d>"] = "<C-d>zz", ["<C-u>"] = "<C-u>zz", n = "nzzzv", N = "Nzzzv" } do
+  map("n", lhs, rhs, { desc = "Navigate and center view" })
+end
+map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+map("n", "<leader>sv", "<cmd>vsplit<CR>", { desc = "Split vertically" })
+map("n", "<leader>ss", "<cmd>split<CR>", { desc = "Split horizontally" })
+map("n", "<leader>Ss", function()
+  vim.ui.input(
+    { prompt = "Save layout as: ", default = vim.fs.basename(require("configs.workspace").root()) },
+    function(name)
+      if name and name:match "^[%w_.-]+$" then
+        require("mini.sessions").write(name)
+      end
+    end
+  )
+end, { desc = "Save editor session" })
+map("n", "<leader>Sr", function()
+  require("mini.sessions").select "read"
+end, { desc = "Restore editor session" })
+map("n", "<leader>Sd", function()
+  require("mini.sessions").select "delete"
+end, { desc = "Delete saved session" })
+map("n", "<leader>z", "<cmd>ZenMode<CR>", { desc = "Toggle focus view" })
+
+map("n", "]h", function()
+  require("gitsigns").nav_hunk "next"
+end, { desc = "Next Git hunk" })
+map("n", "[h", function()
+  require("gitsigns").nav_hunk "prev"
+end, { desc = "Previous Git hunk" })
+map("n", "<leader>gp", function()
+  require("gitsigns").preview_hunk()
+end, { desc = "Preview Git hunk" })
+map("n", "<leader>gs", function()
+  require("gitsigns").stage_hunk()
+end, { desc = "Stage / unstage Git hunk" })
+map("n", "<leader>gu", function()
+  require("gitsigns").reset_buffer_index()
+end, { desc = "Unstage current file" })
+map("n", "<leader>gb", function()
+  require("gitsigns").blame_line { full = true }
+end, { desc = "Git blame line" })
+map("n", "<leader>gg", function()
+  require("configs.workspace").lazygit()
+end, { desc = "Open LazyGit" })
+map("n", "<leader>gv", "<cmd>DiffviewOpen<CR>", { desc = "Review working-tree diff" })
+map("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Close diff review" })
+map("n", "<leader>gH", "<cmd>DiffviewFileHistory %<CR>", { desc = "Current file Git history" })
+
+map("n", "<leader>aa", function()
+  require("configs.workspace").agent()
+end, { desc = "Choose coding agent" })
+map("n", "<leader>ac", function()
+  require("configs.workspace").agent "Codex"
+end, { desc = "Open Codex" })
+map("n", "<leader>aC", function()
+  require("configs.workspace").agent "Claude"
+end, { desc = "Open Claude Code" })
+map("n", "<leader>ao", function()
+  require("configs.workspace").agent "OpenCode"
+end, { desc = "Open OpenCode" })
+map("n", "<leader>at", function()
+  require("configs.workspace").task_note()
+end, { desc = "Open project task note" })
+map("n", "<leader>aw", function()
+  require("configs.workspace").new_worktree()
+end, { desc = "Create isolated Git worktree" })
+map("n", "<leader>al", function()
+  require("configs.workspace").worktrees()
+end, { desc = "List Git worktrees" })

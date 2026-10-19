@@ -9,3 +9,38 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 2
   end,
 })
+
+local group = vim.api.nvim_create_augroup("WorkspaceComfort", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = group,
+  callback = function()
+    vim.hl.on_yank { timeout = 150 }
+  end,
+})
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = group,
+  callback = function(event)
+    local mark = vim.api.nvim_buf_get_mark(event.buf, '"')
+    if mark[1] > 1 and mark[1] <= vim.api.nvim_buf_line_count(event.buf) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = { "markdown", "text" },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.spell = true
+  end,
+})
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  group = group,
+  callback = function(event)
+    local buf = event.buf
+    if vim.api.nvim_get_mode().mode == "n" and vim.bo[buf].buftype == "" and not vim.bo[buf].modified then
+      vim.cmd("checktime " .. buf)
+    end
+  end,
+})

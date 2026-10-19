@@ -1,38 +1,28 @@
-# Billy's Neovim settings — C++ profile
+# Billy's Neovim settings — combined profile
 
-The repository root is an installable NvChad configuration, saved from the
-working C++ milestone on October 18, 2026. It contains language navigation,
-completion/snippets, formatting, fuzzy search, Git signs and CodeLLDB debugging.
-
-## Use this profile separately
-
-Requires Neovim 0.12 (tested with 0.12.6), Git, a compiler and normal NvChad
-prerequisites. MesloLGS or another Nerd Font supplies the icons.
+main now contains the combined Neovim/tmux daily setup: the C++ IDE plus Python,
+JS/TS, shell/JSON tools, editing helpers, sessions, Git review, focus mode, manual
+coding-assistant terminals and independent worktrees. The repository root is the
+actual installable Neovim config; tmux.conf is optional and installed separately.
 
 ```sh
-git clone --branch codex/profile-cpp --single-branch https://github.com/BIN0806/nvim_settings.git ~/.config/nvim-billy-cpp
-NVIM_APPNAME=nvim-billy-cpp nvim
+git clone https://github.com/BIN0806/nvim_settings.git ~/.config/nvim-billy
+NVIM_APPNAME=nvim-billy nvim
 ```
 
-In Neovim, restore the pinned plugins with `:Lazy restore`, install the declared
-tools with `:MasonInstallAll`, and install/update the configured syntax parsers.
-Neovim will bootstrap its plugin manager on first start. No coding agent is
-started by opening the editor.
+Requires Neovim 0.12 (tested 0.12.6), Git, language SDKs as needed, and a Nerd Font.
+Use `:Lazy restore`, `:MasonInstallAll` and the configured Treesitter parsers.
+Choose `codex/profile-cpp` when cloning for the smaller C++-only profile; use a
+different NVIM_APPNAME to keep its data/state separate. No agents start on launch.
 
-Use `:w` to save/format, Space f f to find files, g d for definitions, Space d b
-for breakpoints and Space d r to start debugging. Build C++ with debug symbols
-and a compile_commands.json database first.
+Read [CHANGELOG.md](CHANGELOG.md) for changes, usage, verification and restore
+points. The annotated tags `setup-2026-10-18-cpp` and
+`setup-2026-10-18-merged` preserve exact snapshots. Future settings commits must
+update that file and describe checks actually run. Enable the commit template
+with `git config commit.template .gitmessage`.
 
-## History
+Space a a chooses an assistant, Space a w creates a worktree, Space g v opens
+diff review, Space S s saves an editor layout, and Space S r restores one.
+tmux's prefix is Ctrl+s. Layout restoration does not restart coding agents.
 
-Read [CHANGELOG.md](CHANGELOG.md). Checkpoint: `setup-2026-10-18-cpp`.
-The smaller profile is also preserved at `codex/profile-cpp`; main advances to
-the full daily profile. Close Neovim before switching versions and restore the
-selected revision's plugin lockfile afterward. NVIM_APPNAME keeps each profile's
-plugin/data/state directories separate.
-
-For future commits: update CHANGELOG.md and use the supplied commit template:
-`git config commit.template .gitmessage`. Never force-push a profile or move a
-published checkpoint tag.
-
-Based on the NvChad starter; its original public-domain license is retained.
+The NvChad starter's original public-domain license is retained.
