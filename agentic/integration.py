@@ -47,6 +47,19 @@ with tempfile.TemporaryDirectory(prefix="kun-live-", dir="/private/tmp") as temp
     assert "MISSING:" not in bootstrap.stdout + bootstrap.stderr, "Firstmate reports an unmet dependency"
     passed("Official Firstmate bootstrap accepts installed tool versions and project home")
 
+    dispatch = home / "config/crew-dispatch.json"
+    routing = json.dumps({
+        "rules": [{"when": "A small refactor", "use": {"harness": "codex"}}],
+        "default": [{"harness": "codex"}],
+    }, indent=4) + "\n"
+    dispatch.write_text(routing)
+    kun.setup(root)
+    assert dispatch.read_text() == routing, "Reopening overwrote custom worker routing"
+    routed = call(["bash", kun.VENDOR / "bin/fm-bootstrap.sh", "detect"], env=detect_env)
+    assert "CREW_DISPATCH:" not in routed.stdout + routed.stderr, "Firstmate rejected the preserved dispatch profile"
+    assert "MISSING:" not in routed.stdout + routed.stderr, "Routed bootstrap reports an unmet dependency"
+    passed("Custom Codex routing survives setup and passes official Firstmate bootstrap")
+
     pool = base / "pool"
     lease = call(["treehouse", "get", "--root", pool, "--lease", "--no-fetch", "-b", "codex/integration"], cwd=root, env=env)
     worktree = Path(lease.stdout.strip())

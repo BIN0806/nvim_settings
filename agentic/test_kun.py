@@ -88,6 +88,42 @@ class ProjectTests(unittest.TestCase):
         command(["git", "remote", "add", "no-mistakes", str(gate)], self.root)
         self.assertEqual(kun.setup(self.root)["mode"], "no-mistakes")
 
+    def test_reopening_preserves_custom_worker_rules_and_default_array(self):
+        config = kun.setup(self.root, mode="local-only")
+        dispatch = Path(config["home"]) / "config/crew-dispatch.json"
+        preferences = {
+            "rules": [{"when": "A small refactor", "use": {"harness": "codex"}}],
+            "default": [{"harness": "codex", "model": "fixture-model", "effort": "high"}],
+        }
+        original = json.dumps(preferences, indent=4) + "\n"
+        dispatch.write_text(original)
+        self.cli("setup")
+        self.cli("start", "--print")
+        self.assertEqual(dispatch.read_text(), original)
+        self.assertEqual(json.loads((Path(config["home"]) / "project.json").read_text())["agent"], "codex")
+
+    def test_explicit_assistant_change_preserves_rules_and_replaces_only_default(self):
+        config = kun.setup(self.root, mode="local-only")
+        dispatch = Path(config["home"]) / "config/crew-dispatch.json"
+        rules = [{"when": "A small refactor", "use": {"harness": "codex"}}]
+        dispatch.write_text(json.dumps({"rules": rules, "default": [{"harness": "codex", "model": "fixture-model"}]}))
+        self.cli("setup", "--agent", "claude")
+        self.assertEqual(json.loads(dispatch.read_text()), {"rules": rules, "default": {"harness": "claude"}})
+
+    def test_invalid_routing_is_reported_without_overwriting_project_preferences(self):
+        config = kun.setup(self.root, mode="local-only")
+        home = Path(config["home"])
+        dispatch = home / "config/crew-dispatch.json"
+        previous = (home / "project.json").read_bytes()
+        for content in ('{"rules": [', '[]', 'null'):
+            with self.subTest(content=content):
+                dispatch.write_text(content)
+                result = self.cli("setup", "--agent", "claude", check=False)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("crew-dispatch.json", result.stderr)
+                self.assertEqual(dispatch.read_text(), content)
+                self.assertEqual((home / "project.json").read_bytes(), previous)
+
     def test_firstmate_registry_accepts_generated_posture(self):
         config = kun.setup(self.root, mode="local-only")
         env = kun.environment(Path(config["home"]))

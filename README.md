@@ -22,6 +22,7 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | Control the flying cursor and extra shortcuts | [Cursor effects and extra controls](#cursor-effects-and-extra-controls) |
 | Work with an assistant or initialize a project harness | [Coding with Codex and Kun](#coding-with-codex-and-kun) |
 | Decide whether Herdr or Lotus adds anything to Firstmate | [Firstmate, Herdr and Lotus](#firstmate-herdr-and-lotus) |
+| Check Kun’s advanced and full-stack workflows | [Kun workflow coverage and everyday commands](#kun-workflow-coverage-and-everyday-commands) |
 | Inspect or customize automatic editor actions | [Autocommands you can control](#autocommands-you-can-control) |
 | Install a profile, switch versions or restore a checkpoint | [Profiles, installation and restore points](#profiles-installation-and-restore-points) |
 | See what each video/source contributed and why choices differ | [Tutorial sources and merge decisions](#tutorial-sources-and-merge-decisions) |
@@ -871,6 +872,10 @@ before other arguments. `kun doctor` is independent of the current folder.
 | `kun exec -- no-mistakes` | Open the gate's interactive interface. Its wizard can offer to commit/push; read the prompts. |
 | `kun exec -- tasks-axi list` | Inspect task records in this project's Firstmate environment. |
 
+An explicit `--agent` also resets the fallback worker profile to that harness
+while preserving task-specific routing rules. Ordinary reopening preserves custom
+routing. See [routing preferences](#routing-preferences-that-survive-reopening).
+
 After changing the selected assistant, exit the old primary normally and run
 `kun` again. Reopening a live session intentionally does not kill it or replace
 the conversation. Existing workers keep the assistant they were launched with.
@@ -999,6 +1004,113 @@ delete active worktrees, project state or daemon files while they are in use.
 
 [Back to contents](#contents)
 
+### Kun workflow coverage and everyday commands
+
+The three Kun videos describe the same family of tools at different levels:
+[the original workflow](https://www.youtube.com/watch?v=iQyg-KypKAA),
+[high-throughput orchestration](https://www.youtube.com/watch?v=MSbacZ99E14), and
+[a full-stack build](https://www.youtube.com/watch?v=kPN564Kol14&t=5038s).
+You have the core infrastructure. That is different from having every optional
+account, fleet topology, UI customization and app deployment in his demos.
+
+| Capability | Your current status |
+| --- | --- |
+| Firstmate + Codex, isolated worktrees, task records, tmux, No Mistakes and AXI tools | Installed; `kun doctor` verified the tools and GitHub/Codex logins on October 19. |
+| Planning, implementation and interactive review | Tools available; request an artifact with acceptance criteria, variants and decisions when useful. |
+| Task-specific worker routing | Supported in config/crew-dispatch.json; Kun now preserves it when reopening. Fresh homes still default to Codex. |
+| Quota tool / automatic provider choice | quota-axi installed; actual quota-aware choices need valid profiles and authenticated providers. Extra subscriptions are not configured by this setup. |
+| Fleet recap and decision catch-up | Firstmate ships Bearings and Ahoy; invocation examples below. |
+| Second mates / remote fleet | Upstream supports them; no persistent secondmate or remote host was provisioned here. |
+| One supervisor across many projects | Possible in native Firstmate; Kun normally creates a separate home/session for each project, so there is no single combined fleet by default. |
+| Herdr, Pi and Calm presentation | Optional. Herdr/Pi remain uninstalled; pinned Calm support is for Pi and gated Claude Code support, not Codex. |
+| Discord/X relay and unattended merging | Not enabled. These add external channels or different merge authority; they are not requirements for coding. |
+| A running full-stack/iOS application | Project-specific; this editor setup is not a deployed app or a configured Apple developer environment. |
+
+The [pinned Firstmate configuration guide](https://github.com/kunchenguid/firstmate/blob/45dd50a5e12bc3f5e009a4e18fa35ce7f7a71681/docs/configuration.md)
+owns dispatch and backend settings. Its [Calm guide](https://github.com/kunchenguid/firstmate/blob/45dd50a5e12bc3f5e009a4e18fa35ce7f7a71681/docs/calm.md)
+describes the harness-specific presentation. These are source-supported features,
+not a claim that every optional workflow was exercised with real workers here.
+
+#### Catch up without inspecting every worker
+
+Inside the **Firstmate conversation started by kun**, ask in plain language or
+invoke its bundled skills. These are agent messages, not shell commands:
+
+| Message to Firstmate in Codex | Purpose |
+| --- | --- |
+| `$bearings` | Get a fresh overview of current fleet work and decisions. |
+| `$bearings file` | Also write today's status report in the private home. |
+| `$bearings include PRs` | Include live GitHub PR checks in that overview. |
+| `$ahoy` | Recap visible session events and unanswered decisions since your prior message. |
+| `$stow` | Ask for a durable knowledge/task handoff before ending a session. |
+
+If the skill picker does not expose a name, ask Firstmate to read and follow its
+bundled skill of that name. These are Firstmate-internal skills; do not install
+copies globally into unrelated projects. The `$` invocation is Codex-specific;
+other harnesses use their own skill conventions.
+
+Try this workflow prompt after the project's onboarding:
+
+> Propose a small task queue for this outcome. Separate research from code
+> changes, identify dependencies, and use at most two Codex workers for independent
+> tasks. Keep each writing task in its own worktree. Present one review artifact
+> with the result, checks, limitations and decisions I need to make. Keep merge
+> approval with me. Explain what I can now do when each task completes.
+
+Start with one worker for your first real task. The prompt above is an example
+of requesting parallel work, not a background fleet started by this installation.
+
+#### Routing preferences that survive reopening
+
+Each private Firstmate home has `config/crew-dispatch.json`. Ask Firstmate to
+show the relevant file and propose a change before saving it. Natural-language
+`rules` select task profiles; `default` is the fallback profile or profile array.
+A model and effort can be specified when verified for that assistant, or omitted
+to retain its defaults. Do not copy dated model IDs or provider credentials from
+a video. [Upstream dispatch documentation](https://github.com/kunchenguid/firstmate/blob/45dd50a5e12bc3f5e009a4e18fa35ce7f7a71681/docs/configuration.md#crew-dispatch-profiles-configcrew-dispatchjson)
+describes the schema and quota selection.
+
+- Normal `kun`, `kun setup` and `kun start --print` preserve an existing routing
+  file byte for byte. A missing file is initialized with Codex as the default.
+- An explicit `kun setup --agent claude` changes the primary/pipeline and replaces
+  the routing fallback with Claude. Existing task rules are retained; a model or
+  effort tied to the old fallback is removed. An explicit `--agent codex` likewise
+  selects Codex as the fallback.
+- Invalid JSON or a non-object routing file stops setup with an error, preserving
+  the file and previous project profile. Firstmate bootstrap owns validation of
+  the detailed routing schema. This update does not reconstruct preferences that
+  an older launcher may already have overwritten.
+
+This makes the routing feature usable without forcing extra assistants or
+inventing account access. Your default remains Codex unless you choose otherwise.
+
+#### Full-stack acceptance workflow
+
+The linked **1:23:58** is inside the E2E integration chapter (starting 1:20:33).
+The nearby visible frame at 1:24:02 describes a final acceptance gate across the
+client, backend, identity/permissions and persistence. The reusable lesson is
+to prove connected behavior after the pieces build successfully.
+
+1. Define a small observable outcome, roles and data flow before creating tasks.
+2. Have a scout inspect the existing application, dependencies and actual commands.
+3. Review a plan or interactive prototype, then implement independent pieces in
+   isolated worktrees using agreed interfaces.
+4. Integrate them and exercise a real user path in the intended browser/simulator.
+5. Verify authorization failures, error states and persistence/restart behavior
+   where those are relevant to the application.
+6. Record observed results, skipped scenarios and evidence. Run the project's
+   agreed validation gate, then review the branch/PR and decide on integration.
+
+For a web app, configure its runtime, services and browser session. A native iOS
+app additionally needs the appropriate Xcode SDK/simulator, signing/account setup
+when required, and app-specific backend configuration. Browser-tool installation
+alone does not attach a browser or test your product. No Apple sign-in, hosting,
+domain, database or external secrets were provisioned by this settings audit.
+
+**You can now:** use the core Kun workflow, recover fleet context, keep custom
+routing, and apply the video's plan → build → integrate → verify loop. Optional
+fleet/UI features are clearly separated from the tools already ready to use.
+
 ### Firstmate, Herdr and Lotus
 
 **Recommendation for your current setup:** keep Firstmate + Codex + tmux.
@@ -1117,6 +1229,7 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `setup-2026-10-19-documentation` | The full profile with the unified guide named Documentation.md and migrated history checks. |
 | `setup-2026-10-19-readme` | Full profile with the unified guide displayed as README.md on GitHub. |
 | `setup-2026-10-19-videos` | Full profile with scoped terminal-height behavior, inspectable autocommands and the additional video comparisons. |
+| `setup-2026-10-19-kun-routing` | Current full profile with persistent worker-routing preferences and the Kun follow-up audit. |
 
 The initial commits package saved, tested milestones in order. Tags pin exact
 snapshots; profile branches can receive compatible updates. The smaller C++
@@ -1475,6 +1588,75 @@ preview of the companion article was available; no paywall was bypassed.
 
 **You can now:** inspect, create, reload and remove a small event rule, and keep
 a bottom shell steady while rearranging code. This adds no plugin or paid API.
+
+### 9. Kun Chen — High Throughput Agentic Engineering with Kun
+
+[Video](https://www.youtube.com/watch?v=MSbacZ99E14) ·
+[Firstmate source](https://github.com/kunchenguid/firstmate)
+
+This extends the original workflow rather than introducing another Neovim
+configuration. The following comparison uses the author's chapters and the
+installed Firstmate source, not a recovered full transcript.
+
+| Chapter / idea | Your setup / decision |
+| --- | --- |
+| Firstmate and crewmates, 0:50 / 6:34 | Already installed with Codex workers and Treehouse isolation. |
+| Remove distractions, 4:58 | Calm is harness-specific; keep Codex and use concise handoffs/recaps. |
+| Model routing, 7:12 | Upstream profile support and quota tool are present; fixed Kun so it no longer overwrites custom profiles on every open. |
+| Tracking / catching up, 15:56 / 43:40 | Built-in Bearings/Ahoy available; guide now includes their use. |
+| Second mates, 22:07 | Source support exists; optional topology, not provisioned or live-tested here. |
+| Interactive prototypes / feedback, 25:31 / 40:58 | Lavish tool installed; request an artifact with options and a decision rather than only a prose dump. |
+| Discord and X relay, 29:26 | Optional external integration; not activated. |
+| Context management, 32:49 | Use concise durable context and the harness's own compaction behavior; no copied environment tuning. |
+| Yolo versus No Mistakes, 37:51 / 51:08 | Keep the installed gate and explicit merge decisions; unattended merge mode remains off. |
+
+One Kun project home normally covers one registered project; manually added
+native registry entries are preserved, but separate Kun homes do not become a
+shared global fleet. Herdr/remote hosts and additional subscriptions are optional
+extensions, not missing editor plugins. Existing launch protections are retained.
+
+**You can now:** keep task-specific routing across sessions and use fleet recaps
+and review artifacts, with a clear list of optional scale-up features.
+
+### 10. Kun Chen — L8 Principal Building a Full Stack App with Agentic Engineering
+
+[Video at your timestamp](https://www.youtube.com/watch?v=kPN564Kol14&t=5038s)
+
+This is an application-building demonstration of the same agentic process. Its
+value is how research, prototypes and verification connect, rather than a second
+plugin stack. Your 1:23:58 link falls inside the 1:20:33 E2E chapter.
+
+| Chapter / phase | Your available workflow |
+| --- | --- |
+| Herdr + Firstmate, 0:26; Calm, 3:40 | Firstmate is installed; tmux/Codex is your current alternative presentation/backend. |
+| Product ideation, 5:41 | Define the user outcome, constraints and acceptance criteria with the primary. |
+| Market / technical research, 16:53 / 19:06 | Use bounded scout tasks and source-backed findings before implementation. |
+| Parallelize, 23:43 | Independent workers use worktrees; agree on shared interfaces first. |
+| Interactive planning / UX prototypes, 29:56 / 42:29 | Lavish tool available for a plan or comparison artifact; review it before building. |
+| Secrets, 59:41 | Project-specific configuration and account setup; keep private values out of this settings repo. |
+| Frontend, 1:13:52; browser automation, 1:18:08 | Existing editor/agent/browser tooling; the project still needs its runtime and a browser session. |
+| E2E, 1:20:33; architecture review, 1:33:46 | Prove the integrated behavior, inspect evidence and review the design; a successful build alone is insufficient. |
+
+The visible frame near the linked timestamp was checked at 1:24:02. It outlines
+backend/client acceptance conditions and external deployment inputs. A generic
+Neovim configuration cannot supply that app's Apple identity, signing, servers
+or database. Use the [full-stack acceptance workflow](#full-stack-acceptance-workflow)
+for your own application's actual requirements.
+
+**You can now:** follow the process with the tools already installed, while
+knowing which services and SDKs must be configured in the target project.
+
+### Kun follow-up audit evidence — October 19, 2026
+
+The original iQyg-KypKAA is already covered in video 6, with the previously
+retrieved archived auto-caption transcript and its limitations. For MSbacZ99E14
+and kPN564Kol14, public page metadata and chapter lists were retrieved; English
+caption bodies were empty and public transcript requests returned HTTP 400.
+The known transcript archive contained only the original video, not these two.
+The linked full-stack segment was inspected visually, and installed Firstmate
+code/docs were audited for the capabilities above. No full transcript or
+uninterrupted viewing of the two new recordings is claimed. Third-party search
+summaries were not treated as authoritative implementation instructions.
 
 ### Original tutorial timeline
 
@@ -1866,6 +2048,24 @@ the code window splits; vertical/generic terminals remain unfixed; and the local
 height preference can be disabled. Generic fixtures are real shell terminals,
 not an end-to-end run of a particular test plugin. No model request was made.
 
+### Kun follow-up verification — October 19, 2026
+
+The updated launcher passed 23 functional fixtures, including three new cases:
+custom object/array routing survives setup and launch preview byte for byte;
+an explicit assistant change preserves rules while replacing the fallback; and
+malformed/non-object JSON is reported without changing the saved project profile.
+The original adapter, mode, worktree/session and project-preservation cases also
+pass. Five installed-tool integration checks passed, including the preserved
+Codex profile through official Firstmate bootstrap, real worktree leasing and
+the local gate. A smoke test through the installed `kun` command also preserved
+custom routing across setup/launch preview in a temporary Git repository.
+
+`kun doctor` verified all shared tool commands and GitHub/Codex login state.
+Bundled Ahoy/Bearings/Stow, dispatch and secondmate code were inspected for
+availability; this was not a live exercise of a secondmate fleet, browser task,
+public relay or paid model pipeline. The core installed integration results from
+October 18 remain historical evidence where not explicitly rerun here.
+
 ### Reproduce the relevant checks
 
 From the settings clone, `python3 scripts/check.py` parses Lua/Python/JSON and
@@ -1900,6 +2100,26 @@ required for a small documentation edit. Results/logs are ignored local files.
 Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
+
+### 2026-10-19 — Kun follow-up audit and persistent worker routing
+
+- **Profile/checkpoint:** full; `setup-2026-10-19-kun-routing`.
+- **Changed/why:** audit the high-throughput and full-stack videos against the
+  existing original Kun workflow. Fix a launcher bug that reset worker routing
+  every time a project was reopened; keep custom rules/default profiles intact.
+- **Use:** reopen normally with `kun`. An explicit `--agent` changes the fallback
+  and primary/pipeline while retaining task rules. Invalid JSON is preserved and
+  reported before the saved project profile is changed.
+- **Guide:** add per-video coverage, available versus optional fleet features,
+  Codex recap invocations, routing behavior and a full-stack acceptance checklist.
+  Kun remains Codex/tmux by default; no extra subscription, fleet or relay enabled.
+- **Validation:** 23 functional checks; five installed-tool integrations and an
+  installed-command routing smoke test; doctor tool/login checks;
+  Python/JSON/Lua syntax, README navigation and installed/source launcher parity.
+  No model calls. New transcripts unavailable; evidence limits recorded above.
+- **Restore:** preceding checkpoint `setup-2026-10-19-videos`. An already-running
+  primary keeps its current state; the updated launcher applies on the next open.
+  Config Git rollback does not revert separately installed launcher/private state.
 
 ### 2026-10-19 — additional tutorials and agent-tool comparison
 
@@ -2186,6 +2406,8 @@ separately named grammar.
 | Terminal layout persistence | tmux-resurrect + tmux-continuum; periodic save, manual restore, process replay off |
 | Assistant CLIs | Codex default; Claude Code 2.1.303 and OpenCode also available |
 | Assistant selection | Space a a for manual use; Space a k / kun for Firstmate with Codex; Pi remains optional |
+| Worker routing | Private crew-dispatch.json preserved on reopening; explicit assistant selection updates its fallback |
+| Fleet context | Built-in Firstmate Bearings, Ahoy and Stow available; usage above |
 | Project planning | On-demand .agent-notes/task.md + a project-context starter |
 | Parallel task isolation | Git worktree helper: create a new branch/checkout, list existing worktrees |
 | Quality workflow | Define outcome → plan → implement → run relevant checks → inspect behavior/diff → approve integration |
@@ -2230,7 +2452,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Current full-profile checkpoint | setup-2026-10-19-videos |
+| Current full-profile checkpoint | setup-2026-10-19-kun-routing |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not
@@ -2244,7 +2466,7 @@ documentation; AGENTS.md is a brief repository instruction pointer.
 - [The Rad Lectures](https://www.youtube.com/watch?v=lljs_7xB7Ps) / [radleylewis](https://github.com/radleylewis/nvim-lite)
 - [Mental Outlaw](https://www.youtube.com/watch?v=yW3ovyQCwpw)
 - [Andrew Courter](https://www.youtube.com/watch?v=xUnXcVxcJho) / [exosyphon](https://github.com/exosyphon/dotfiles)
-- [Kun Chen](https://www.youtube.com/watch?v=iQyg-KypKAA) / [kunchenguid](https://github.com/kunchenguid/firstmate)
+- [Kun Chen](https://www.youtube.com/watch?v=iQyg-KypKAA) / [kunchenguid](https://github.com/kunchenguid/firstmate) — also [high-throughput workflow](https://www.youtube.com/watch?v=MSbacZ99E14) and [full-stack build](https://www.youtube.com/watch?v=kPN564Kol14)
 - [typecraft](https://www.youtube.com/watch?v=J9yqSdvAKXY) / [cpow](https://github.com/cpow/cpow-dotfiles)
 - [Magicalbat](https://github.com/Magicalbat/Configs)
 - [sphamba](https://github.com/sphamba/smear-cursor.nvim) — cursor-animation plugin

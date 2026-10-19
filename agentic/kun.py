@@ -159,6 +159,20 @@ def setup(root, agent=None, mode="auto"):
         install = json.loads((INSTALL / "installation.json").read_text())
         if selected_agent not in install.get("agents", {}):
             raise KunError(f"{selected_agent} CLI is unavailable; choose another with --agent")
+        dispatch_path = home / "config/crew-dispatch.json"
+        dispatch_update = None
+        if dispatch_path.exists():
+            try:
+                dispatch = json.loads(dispatch_path.read_text())
+            except json.JSONDecodeError as error:
+                raise KunError("Invalid config/crew-dispatch.json; existing routing was preserved. Correct its JSON before reopening Kun.") from error
+            if not isinstance(dispatch, dict):
+                raise KunError("config/crew-dispatch.json must contain a JSON object; existing routing was preserved.")
+            if agent is not None:
+                # An explicit assistant selection changes the fallback, not task rules.
+                dispatch_update = {**dispatch, "default": {"harness": selected_agent}}
+        else:
+            dispatch_update = {"default": {"harness": selected_agent}}
         registry = home / "data/projects.md"
         registry_mode = None
         if registry.exists():
@@ -190,7 +204,8 @@ def setup(root, agent=None, mode="auto"):
         write_json(home / "project.json", config)
         (home / "config/backend").write_text("tmux\n")
         (home / "config/claude-permission-mode").write_text("auto\n")
-        write_json(home / "config/crew-dispatch.json", {"default": {"harness": selected_agent}})
+        if dispatch_update is not None:
+            write_json(dispatch_path, dispatch_update)
         registry_lines = registry.read_text().splitlines() if registry.exists() else ["# Projects", ""]
         matching = [i for i, line in enumerate(registry_lines) if line.startswith(f"- {slug} [") or line.startswith(f"- {slug} - ")]
         entry = f"- {slug} [{selected_mode} branch=codex/] - Existing local project at {root} (added {config['created']})"
