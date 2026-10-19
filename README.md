@@ -27,6 +27,7 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | See the dated settings changes | [Change log](#change-log) |
 | Copy a starter for your project's facts and commands | [Project context template](#project-context-template) |
 | See the complete installed stack | [Final installed stack](#final-installed-stack) |
+| Find the people behind the setup | [Sources and credits](#sources-and-credits) |
 
 ## Quick start
 
@@ -1358,13 +1359,6 @@ numbers. Git hunk actions use **Space g ...**, because **Space h** already opens
 a terminal. Moving lines uses **Space m h/j/k/l**, preserving Alt+h/v/i terminal
 shortcuts. Sessions use uppercase **Space S ...**, avoiding NvChad's buffer keys.
 
-### Credits
-
-The NvChad starter's original public-domain license is retained. Plugin and
-external-tool licenses remain with their projects; installed dependencies are
-not vendored here. Tutorial authors and repositories are linked above. Captions,
-personal transcripts, credentials and machine backups are not uploaded.
-
 [Back to contents](#contents)
 
 ## Maintenance, troubleshooting and verification
@@ -1675,6 +1669,19 @@ Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
 
+### 2026-10-19 — source credits at the bottom of the README
+
+- **Profile:** full; documentation only.
+- **Changed/why:** add a concise list of the tutorial/configuration authors and
+  cursor-plugin author at the bottom, with their YouTube/GitHub names and links.
+  Move the existing license note there and link the section from Contents.
+- **Use:** follow Sources and credits to find the original creators; detailed
+  contributions and substitutions remain in Tutorial sources and merge decisions.
+- **Validation:** recorded video-author names checked; document links/anchors,
+  single-guide policy, Python/JSON and Lua syntax checks pass.
+- **Restore:** `setup-2026-10-19-readme` is the preceding tagged snapshot. Settings
+  and shortcuts are unchanged.
+
 ### 2026-10-19 — display the guide on the GitHub homepage
 
 - **Profile/checkpoint:** full; `setup-2026-10-19-readme`.
@@ -1974,3 +1981,19 @@ Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not
 rolled back by selecting a config tag. This file is the maintained user-facing
 documentation; AGENTS.md is a brief repository instruction pointer.
+
+### Sources and credits
+
+- [Dreams of Code](https://www.youtube.com/watch?v=lsFoZIg-oDs) / [dreamsofcode-io](https://github.com/dreamsofcode-io/neovim-cpp)
+- [Average Neovim Enjoyer](https://www.youtube.com/watch?v=w0WzxUPtKf0)
+- [The Rad Lectures](https://www.youtube.com/watch?v=lljs_7xB7Ps) / [radleylewis](https://github.com/radleylewis/nvim-lite)
+- [Mental Outlaw](https://www.youtube.com/watch?v=yW3ovyQCwpw)
+- [Andrew Courter](https://www.youtube.com/watch?v=xUnXcVxcJho) / [exosyphon](https://github.com/exosyphon/dotfiles)
+- [Kun Chen](https://www.youtube.com/watch?v=iQyg-KypKAA) / [kunchenguid](https://github.com/kunchenguid/firstmate)
+- [Magicalbat](https://github.com/Magicalbat/Configs)
+- [sphamba](https://github.com/sphamba/smear-cursor.nvim) — cursor-animation plugin
+
+The NvChad starter's original public-domain license is retained. Plugin and
+external-tool licenses remain with their projects; installed dependencies are
+not vendored here. Captions, personal transcripts, credentials and machine
+backups are not uploaded.
