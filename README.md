@@ -16,6 +16,7 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | If you want to… | Read |
 | --- | --- |
 | Start working or find a common shortcut | [Quick start](#quick-start) |
+| Open the home screen | [Home dashboard](#home-dashboard) |
 | Learn modes, navigation and editing | [Editing and navigation](#editing-and-navigation) |
 | Use completion, formatting, builds and the debugger | [Languages, formatting and debugging](#languages-formatting-and-debugging) |
 | Review changes, arrange windows or use tmux | [Git review, layouts and tmux](#git-review-layouts-and-tmux) |
@@ -33,6 +34,31 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | Find the people behind the setup | [Sources and credits](#sources-and-credits) |
 
 ## Quick start
+
+### Home dashboard
+
+Your setup uses **NvChad**, with **lazy.nvim** managing its plugins. LazyVim is a
+separate distribution; installing the Lazy plugin manager alone does not add
+LazyVim's home screen. NvChad's own dashboard was previously left at its default
+`load_on_startup = false`. It is now enabled in `lua/chadrc.lua`.
+
+Start `nvim` or `nvim .` to see the home screen. Opening a specific file with
+`nvim path/to/file` still opens that file directly. From an existing editor
+window, press **Space u d** or run `:Nvdash` to open the dashboard.
+
+| On the dashboard | Action |
+| --- | --- |
+| ff | Find a file. |
+| fo | Open the recent-files picker. |
+| fw | Search project text. |
+| th | Open the theme picker. |
+| ch | Open the mapping cheatsheet. |
+| j / k, then Enter | Select and run a menu action. |
+
+These are dashboard-local keys without Space; your usual Space f f / Space f w
+shortcuts still work while editing. Use `:q` to quit. The dashboard starts no
+coding agent. To disable automatic display, set `load_on_startup = false` in
+`lua/chadrc.lua` and restart Neovim; the manual shortcut remains available.
 
 ### Open a project
 
@@ -61,6 +87,7 @@ Control and press n. Uppercase letters require Shift.
 | --- | --- |
 | Start typing / stop typing | i / Esc (or jk) |
 | Save / quit a window | :w / :q, then Enter |
+| Open the home dashboard | Space u d or :Nvdash |
 | Find a file / search project text | Space f f / Space f w |
 | Browse files / switch open buffers | Ctrl+n / Tab or Shift+Tab |
 | Definition / references / documentation | g d / g r / K |
@@ -1229,7 +1256,8 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `setup-2026-10-19-documentation` | The full profile with the unified guide named Documentation.md and migrated history checks. |
 | `setup-2026-10-19-readme` | Full profile with the unified guide displayed as README.md on GitHub. |
 | `setup-2026-10-19-videos` | Full profile with scoped terminal-height behavior, inspectable autocommands and the additional video comparisons. |
-| `setup-2026-10-19-kun-routing` | Current full profile with persistent worker-routing preferences and the Kun follow-up audit. |
+| `setup-2026-10-19-kun-routing` | Full profile with persistent worker-routing preferences and the Kun follow-up audit. |
+| `setup-2026-10-19-dashboard` | Current full profile with the startup dashboard and Space u d home shortcut enabled. |
 
 The initial commits package saved, tested milestones in order. Tags pin exact
 snapshots; profile branches can receive compatible updates. The smaller C++
@@ -2101,6 +2129,23 @@ Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
 
+### 2026-10-19 — enable the home dashboard
+
+- **Profile/checkpoint:** full; `setup-2026-10-19-dashboard`.
+- **Changed/why:** enable NvChad's existing Nvdash startup screen, which had been
+  left disabled. Add Space u d to open it manually; no extra dashboard plugin.
+- **Use:** launch `nvim` or `nvim .`; use the dashboard's file/recent/text/theme/help
+  actions. Explicit file arguments open directly. Set load_on_startup to false
+  in lua/chadrc.lua to restore the previous startup preference.
+- **Validation:** real empty, directory and file startup checks pass; rendered
+  action labels and bindings verified, and the manual home shortcut preserves
+  an open file. The five autocommand/terminal checks still pass after giving the
+  fixture its own editable buffer. Lua/Python/JSON, formatting and links checked;
+  dashboard settings match active/source/export copies. A separate local cursor
+  adjustment is preserved outside this change. No plugin downloads or model requests.
+- **Restore:** previous checkpoint `setup-2026-10-19-kun-routing`. The smaller
+  C++ profile and existing checkpoint tags retain their original behavior.
+
 ### 2026-10-19 — Kun follow-up audit and persistent worker routing
 
 - **Profile/checkpoint:** full; `setup-2026-10-19-kun-routing`.
@@ -2340,6 +2385,7 @@ editor plugin commits; optional tools are identified separately below.
 | --- | --- | --- |
 | Editor | Neovim 0.12.6 | Editing engine and native LSP APIs. |
 | Distribution | NvChad v2.5 | Coherent defaults, statusline, buffer line and terminal UI. |
+| Home screen | Built-in NvChad Nvdash | Startup menu and Space u d; explicit file launches open directly. |
 | Theme | Catppuccin via NvChad/base46 | Editor colors; matching static tmux palette. |
 | Font | Existing MesloLGS NF terminal font | Icons; other installed Nerd Fonts remain available. |
 | Plugin management | lazy.nvim + lazy-lock.json | Plugin loading and recorded revisions. |
@@ -2452,7 +2498,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Current full-profile checkpoint | setup-2026-10-19-kun-routing |
+| Current full-profile checkpoint | setup-2026-10-19-dashboard |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not

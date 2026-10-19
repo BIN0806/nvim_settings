@@ -25,6 +25,7 @@ local function run()
   end
   pass "Autocommands reload without duplicates and have readable descriptions"
 
+  vim.cmd.enew()
   local calls = 0
   local highlight = vim.hl.on_yank
   vim.hl.on_yank = function()

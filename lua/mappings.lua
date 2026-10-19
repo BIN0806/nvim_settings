@@ -33,6 +33,7 @@ map("n", "<leader>uf", function()
   vim.b.disable_autoformat = not vim.b.disable_autoformat
   vim.notify("Format on save: " .. (vim.b.disable_autoformat and "off" or "on"))
 end, { desc = "Toggle format on save for buffer" })
+map("n", "<leader>ud", "<cmd>Nvdash<CR>", { desc = "Open home dashboard" })
 
 for lhs, rhs in pairs { ["<C-d>"] = "<C-d>zz", ["<C-u>"] = "<C-u>zz", n = "nzzzv", N = "Nzzzv" } do
   map("n", lhs, rhs, { desc = "Navigate and center view" })
