@@ -21,6 +21,8 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | Review changes, arrange windows or use tmux | [Git review, layouts and tmux](#git-review-layouts-and-tmux) |
 | Control the flying cursor and extra shortcuts | [Cursor effects and extra controls](#cursor-effects-and-extra-controls) |
 | Work with an assistant or initialize a project harness | [Coding with Codex and Kun](#coding-with-codex-and-kun) |
+| Decide whether Herdr or Lotus adds anything to Firstmate | [Firstmate, Herdr and Lotus](#firstmate-herdr-and-lotus) |
+| Inspect or customize automatic editor actions | [Autocommands you can control](#autocommands-you-can-control) |
 | Install a profile, switch versions or restore a checkpoint | [Profiles, installation and restore points](#profiles-installation-and-restore-points) |
 | See what each video/source contributed and why choices differ | [Tutorial sources and merge decisions](#tutorial-sources-and-merge-decisions) |
 | Update settings, solve a problem or inspect test evidence | [Maintenance, troubleshooting and verification](#maintenance-troubleshooting-and-verification) |
@@ -145,6 +147,75 @@ Colon commands finish with Enter. Commands such as `cmake`, `git` and `npm`
 belong in a terminal. Space shortcuts belong in Neovim's Normal mode. tmux uses
 its separate Ctrl+s prefix. The same key can mean different things in different
 programs, so check which pane and mode have focus.
+
+### Autocommands you can control
+
+An autocommand runs a small action when an editor event occurs. A named group
+keeps related actions together; `clear = true` lets that group reload without
+adding a second copy of each action. Your local rules live in `lua/autocmds.lua`.
+
+| Event / group | What your setup does |
+| --- | --- |
+| FileType / CppIndent | Use two-space indentation for C/C++. |
+| TextYankPost / WorkspaceComfort | Briefly highlight copied text. |
+| BufReadPost / WorkspaceComfort | Restore the last valid cursor position. |
+| FileType / WorkspaceComfort | Enable wrap, line breaks and spelling for prose. |
+| FocusGained, BufEnter, CursorHold / WorkspaceComfort | Refresh external changes in unmodified Normal-mode file buffers. |
+| TermOpen / WorkspaceComfort | Keep a newly opened NvChad horizontal terminal's height when you split the code above it. |
+
+**New from Courter's autocommand example:** open a bottom terminal with Space h,
+then return to the code and use Space s s. The terminal keeps its height. Inside
+the terminal, Ctrl+x leaves input mode; `:setlocal nowinfixheight` lets Neovim
+resize that window normally again. `:resize 12` sets its height explicitly.
+NvChad already enters terminal input mode for its own terminals. The new rule
+only adjusts its `NvTerm_sp` windows; generic debug/test terminals and vertical
+terminals keep their existing behavior.
+
+Use these commands in Neovim to inspect the rules:
+
+```vim
+:autocmd WorkspaceComfort
+:autocmd CppIndent
+:verbose autocmd TermOpen
+:lua vim.print(vim.api.nvim_get_autocmds({ group = "WorkspaceComfort" }))
+```
+
+Descriptions identify each rule in the output. To disable the terminal-height
+rule for future terminals in the current editor session:
+
+```vim
+:lua vim.api.nvim_clear_autocmds({ group = "WorkspaceComfort", event = "TermOpen" })
+```
+
+This does not change an already open window's `winfixheight`; use the local
+option above there. To restore the configured rules after a temporary change:
+
+```vim
+:lua dofile(vim.fn.stdpath("config") .. "/lua/autocmds.lua")
+```
+
+For your own rule, add a separately named group to `lua/autocmds.lua`, for example:
+
+```lua
+local group = vim.api.nvim_create_augroup("MyWorkspaceDemo", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = group,
+  pattern = "*.txt",
+  desc = "Announce a text file for learning autocommands",
+  callback = function()
+    vim.notify("Text file opened")
+  end,
+})
+```
+
+Reload that file and enter a `.txt` buffer to try it. Run
+`:lua vim.api.nvim_del_augroup_by_name("MyWorkspaceDemo")` to remove the demo for
+this session; remove its source block too if it should stay removed. Clear your
+own group when experimenting, rather than all plugin autocommands. The modern
+Lua API supports callbacks and groups directly; see `:help nvim_create_autocmd()`.
+
+**You can now:** understand which automatic actions run, find their source,
+experiment without stacking duplicate callbacks, and undo a local rule.
 
 ### Find files and understand unfamiliar code
 
@@ -928,6 +999,82 @@ delete active worktrees, project state or daemon files while they are in use.
 
 [Back to contents](#contents)
 
+### Firstmate, Herdr and Lotus
+
+**Recommendation for your current setup:** keep Firstmate + Codex + tmux.
+Neither comparison video adds a prerequisite. Herdr is an optional workspace
+upgrade; Lotus is an optional separate assistant, useful mainly if you want
+local model inference or its Mac-specific conveniences.
+
+| Tool | Main role | What you already have / what it adds |
+| --- | --- | --- |
+| Neovim | Edit, navigate, format and debug code | Your current editor. |
+| tmux | Host terminal sessions, windows and panes | Your installed Firstmate backend. |
+| Firstmate | Delegate tasks, supervise workers, use isolated worktrees and coordinate delivery | Your installed Kun/Codex workflow. |
+| Herdr | Host agent terminals with a mouse-friendly workspace and agent-state display | An alternative to tmux that Firstmate supports. |
+| Lotus | Chat with an assistant and run Mac/file/shell tools, with an optional local model | An alternative manual assistant; not a verified Firstmate worker in this setup. |
+
+#### Jilles — Herdr in about 6 minutes
+
+[Video](https://www.youtube.com/watch?v=qnIu-Xu64H0) ·
+[Official docs](https://herdr.dev/docs/) ·
+[Firstmate's pinned Herdr backend guide](https://github.com/kunchenguid/firstmate/blob/45dd50a5e12bc3f5e009a4e18fa35ce7f7a71681/docs/herdr-backend.md)
+
+The video covers integrations/agent skill at 0:20, workspaces at 1:08, agent
+states at 2:28, tabs/panes at 3:13, session recovery at 3:58, and agent-driven
+sub-agents at 4:50. Native working/blocked/idle indicators and clickable workspace
+management are its clearest additions. Session detach/rejoin already exists in
+your tmux setup. The demo of spawning sub-agents overlaps with Firstmate's crew,
+but terminal controls alone do not supply your task intake, supervision and
+delivery policy. [Herdr's agent guide](https://herdr.dev/docs/agents/) describes
+its state detection and integrations.
+
+**Can they combine? Yes:** Firstmate can run workers in Herdr instead of tmux.
+The pinned Firstmate source already includes that adapter. Treehouse still owns
+task worktrees; Herdr owns the terminal endpoints. However, your custom `kun`
+launcher explicitly sets `FM_BACKEND=tmux`, writes `config/backend` as tmux and
+uses tmux to launch/attach. Setting `FM_BACKEND=herdr kun` alone will not switch
+it. A supported change needs a Kun backend option plus matching launch, doctor,
+attach and stop behavior, verified in a separate Firstmate home first.
+
+**Decision:** documented as optional, left uninstalled. Consider it when status
+visibility and mouse controls solve an actual problem. A migration should use a
+compatible Herdr protocol/version and avoid nesting tmux in Herdr by accident.
+The installed adapter requires protocol 14 or newer; that floor alone is not a
+guarantee that every newer release was tested. Recovery restores layouts or
+resumes supported agents; a reboot cannot preserve a running process's memory.
+See [Herdr's session-state guide](https://herdr.dev/docs/session-state/).
+
+**You gain from this review:** a clear upgrade path for terminal usability while
+retaining Firstmate's orchestration. You do not need a second supervisor.
+
+#### Fanxy — Lotus 2.6
+
+[Video](https://www.youtube.com/watch?v=WZ9SPo_rnVU) ·
+[Official source and commands](https://github.com/Fanxy13/homebrew-lotus)
+
+The video presents local AI at 0:15, file/command actions at 0:25, web search and
+memory at 0:43, permissions/pets at 0:58, and optional features/background removal
+at 1:15. Current source also supports a browser chat; that is a later/current
+capability, not an extra Neovim requirement.
+
+**Overlap:** coding chat, file edits and command execution overlap with your
+manual Codex/Claude/OpenCode launchers. **Distinct benefit:** MLX inference on
+Apple Silicon, plus Mac conveniences such as pets and image background removal.
+Firstmate does not supply a local model engine. Lotus does not replace your
+Firstmate task/worktree/delivery setup, and no Lotus worker adapter was verified.
+
+**Decision:** documented as optional, left uninstalled. Use it separately if you
+want those features. Local weights require disk space and enough unified memory;
+cloud providers and web search still involve network requests. Local inference
+is not a promise that every Lotus feature stays offline. Your current default
+assistant remains Codex; no startup hooks or model downloads were added.
+
+**You gain from this review:** a choice of local assistant features without
+confusing them with the system that coordinates your coding workers.
+
+[Back to contents](#contents)
+
 ## Profiles, installation and restore points
 
 ### Install a separate full profile
@@ -968,7 +1115,8 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `setup-2026-10-19-cursor` | Full profile with terminal cursor animation and compatible Magicalbat additions. |
 | `setup-2026-10-18-full` | Full profile including optional Kun/Codex launcher sources and instructions. |
 | `setup-2026-10-19-documentation` | The full profile with the unified guide named Documentation.md and migrated history checks. |
-| `setup-2026-10-19-readme` | Current full profile with the unified guide displayed as README.md on GitHub. |
+| `setup-2026-10-19-readme` | Full profile with the unified guide displayed as README.md on GitHub. |
+| `setup-2026-10-19-videos` | Full profile with scoped terminal-height behavior, inspectable autocommands and the additional video comparisons. |
 
 The initial commits package saved, tested milestones in order. Tags pin exact
 snapshots; profile branches can receive compatible updates. The smaller C++
@@ -1095,6 +1243,32 @@ Repositories can change after a video is recorded. Where newer source inspired
 an addition, that distinction is identified below. Detailed research decisions
 appear in the [foundation conflicts](#why-overlapping-foundations-were-combined-selectively)
 and the [timestamped C++ comparison](#original-tutorial-timeline) below.
+
+### Additional video review — October 19, 2026
+
+Your new batch contains three previously reviewed videos and four new ones.
+The repeated videos were checked against the installed choices; their detailed
+breakdowns remain below, rather than duplicating their configuration.
+
+| Video in this batch | Outcome |
+| --- | --- |
+| typecraft — J9yqSdvAKXY | Existing editor already supplies the demonstrated components; retain one plugin manager/theme/statusline. See video 7 below. |
+| Andrew Courter — xUnXcVxcJho | Already integrated tmux/navigation workflow; current dotfiles reviewed again at d0aa24654906. See video 5. |
+| Dreams of Code — lsFoZIg-oDs | Existing C++/format/debug path retained; no second LSP/formatter/debugger added. See video 1. |
+| The Rad Lectures — lljs_7xB7Ps | Existing mini tools, sessions, Git review and language setup retained. See video 3. |
+| Andrew Courter — qN6BuJpsFbQ | Add scoped horizontal-terminal height behavior and readable rule descriptions; document rule management. See video 8. |
+| Jilles — qnIu-Xu64H0 | Comparison only: Herdr can replace tmux beneath Firstmate. [Assessment](#jilles--herdr-in-about-6-minutes). |
+| Fanxy — WZ9SPo_rnVU | Comparison only: Lotus is a separate assistant/local-model option. [Assessment](#fanxy--lotus-26). |
+
+**Evidence limits for this batch:** titles, authors, descriptions and chapters
+were retrieved for all four new videos. Their advertised English caption tracks
+returned empty bodies; public transcript requests failed, and the browser
+transcript panels inspected for typecraft/Courter stayed loading. Courter's
+example code at 6:19 was visually checked: TermOpen with startinsert/winfixheight,
+plus TextYankPost highlighting. Linked repositories, installed NvChad code and
+Firstmate's pinned backend documentation were inspected. No complete new
+transcript was recovered, and this review is not claimed as uninterrupted
+playback of all seven links. Raw local research is not uploaded to this repo.
 
 ### 1. Dreams of Code — The perfect Neovim setup for C++
 
@@ -1254,6 +1428,53 @@ unattended loops and dedicated voice input remain optional.
 
 **You gain:** a reusable supervisor/worker workflow with isolated worktrees,
 persistent task context and optional gated PR delivery, alongside manual editing.
+
+### 7. typecraft — How to Configure Neovim to make it Amazing
+
+[Video](https://www.youtube.com/watch?v=J9yqSdvAKXY) ·
+[Author's current configuration](https://github.com/cpow/cpow-dotfiles)
+
+The video teaches a small Lua-based editor from scratch. Its current linked
+configuration was reviewed at `b3cc17c402a5cb9b3b7bcaee8dfdd2b9f29d41c0`;
+the old neovim-config-lua URL resolves to that same configuration.
+
+| Tutorial idea | Your equivalent / decision |
+| --- | --- |
+| init.lua and modular require calls, 1:00–2:10 | Already split across init.lua, options.lua, mappings.lua, autocmds.lua and configs/. |
+| Packer, 3:00 | Keep Lazy. [Packer's own notice](https://github.com/wbthomason/packer.nvim) says it is unmaintained; the author's current config also uses Lazy. |
+| Theme, powerline/statusline and file tree, 4:10 | Catppuccin + NvChad statusline + nvim-tree already serve these roles. |
+| Separate plugin configuration, 5:05 | lua/plugins/init.lua declares plugins; lua/configs/ holds their settings. |
+| Treesitter and Telescope, 6:55 | Already enabled; Space f f finds files and Space f w searches project text. |
+| Clear search highlighting | Your Esc mapping; Space h stays the horizontal terminal. |
+
+Gruvbox and lualine are valid alternatives, but changing the theme or statusline
+would be a preference swap. Loading two statusline configurations or Packer next
+to Lazy would create overlapping ownership. Later tools in the current dotfiles
+(Copilot, Oil, Swagger/Markdown previews and more) are not treated as requirements
+of this nine-minute tutorial. No extra plugin/account was added from them.
+
+**You can now:** locate the file that controls each part of your editor, change
+one module at a time, and understand why the existing plugins cover this video.
+
+### 8. Andrew Courter — Autocommands in Neovim
+
+[Video](https://www.youtube.com/watch?v=qN6BuJpsFbQ) ·
+[Companion article](https://levelup.gitconnected.com/create-autocommands-in-neovim-7199af02a85e)
+
+The chapter sequence teaches command-line creation (0:39), Lua callbacks (1:48),
+listing (4:26), removal/disabling (5:22), then examples (6:14). Only the public
+preview of the companion article was available; no paywall was bypassed.
+
+| Demonstrated behavior | Integration |
+| --- | --- |
+| Named groups and Lua callbacks | Existing CppIndent and WorkspaceComfort groups clear their own previous registrations. |
+| Listing and disabling rules | Every local rule now has a description; commands are in [Autocommands you can control](#autocommands-you-can-control). |
+| TermOpen → startinsert | NvChad already starts its own terminals in input mode; avoid a blanket callback that also grabs test/debug terminals. |
+| Terminal winfixheight | Added for NvChad horizontal terminals only; you can turn it off per window. |
+| TextYankPost feedback | Existing vim.hl.on_yank provides this; keep one callback. |
+
+**You can now:** inspect, create, reload and remove a small event rule, and keep
+a bottom shell steady while rearranging code. This adds no plugin or paid API.
 
 ### Original tutorial timeline
 
@@ -1505,6 +1726,7 @@ versions have separate lifecycles.
 | Kun | 20 functional + 4 installed-tool checks, key/path and runtime checks |
 | Cursor merge | 5 terminal checks, MATLAB parsing and Neovide-mode compatibility on October 19 |
 | Documentation consolidation | Link/anchor policy, syntax and updated history-hook checks |
+| Additional videos / autocommands | 5 real Neovim checks: reload, yank, fixed shell height, scope and opt-out |
 
 The original Mac used Neovim 0.12.6 and tmux 3.8. Runtime and login observations
 below are dated setup results, not promises that cloning reproduces account
@@ -1635,6 +1857,15 @@ document links resolve. Earlier C++/language/tmux checks above are prior recorde
 results, not newly rerun suites. No model calls were made. This verifies renderer
 activity, not an exact visual match to an unidentified video/GUI animation.
 
+### Additional autocommand verification — October 19, 2026
+
+Five checks passed against the candidate module and installed NvChad terminal
+implementation: reload twice without duplicated registrations; a real yank
+fires one highlight callback; an actual horizontal shell keeps its height when
+the code window splits; vertical/generic terminals remain unfixed; and the local
+height preference can be disabled. Generic fixtures are real shell terminals,
+not an end-to-end run of a particular test plugin. No model request was made.
+
 ### Reproduce the relevant checks
 
 From the settings clone, `python3 scripts/check.py` parses Lua/Python/JSON and
@@ -1649,6 +1880,7 @@ cmake -S example -B example/build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPO
 cmake --build example/build
 nvim --headless -i NONE -c 'luafile verification/runtime.lua'
 nvim --headless -i NONE -c 'luafile verification/merge-runtime.lua'
+nvim --headless -i NONE -n -c 'luafile verification/autocmd-runtime.lua'
 python3 verification/tmux.py
 python3 agentic/test_kun.py
 python3 agentic/integration.py
@@ -1668,6 +1900,27 @@ required for a small documentation edit. Results/logs are ignored local files.
 Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
+
+### 2026-10-19 — additional tutorials and agent-tool comparison
+
+- **Profile/checkpoint:** full; `setup-2026-10-19-videos`.
+- **Changed/why:** follow the additional typecraft and Courter material without
+  duplicating existing editor components. Add fixed height for NvChad horizontal
+  terminals and descriptions for local autocommands. Keep rule reloads grouped.
+- **Use:** Space h opens the bottom shell; split code above it without shrinking
+  that shell. `:setlocal nowinfixheight` opts an individual window out. New guide
+  sections explain inspecting, creating, disabling and restoring rules.
+- **Comparison:** Herdr is a potential tmux replacement beneath Firstmate;
+  Lotus is a separate assistant/local inference option. Both remain optional
+  and uninstalled. The Kun launcher still selects tmux and Codex.
+- **Evidence:** three video links were repeats. New caption/transcript retrieval
+  failed; descriptions/chapters, Courter example frames, author repositories and
+  pinned Firstmate sources were reviewed, with the limits recorded above.
+- **Validation:** five actual Neovim autocommand/terminal checks pass; settings
+  Lua, Python/JSON and local document navigation checked. Active/source/export
+  settings match. No new plugin installation or model request.
+- **Restore:** `setup-2026-10-19-readme` is the preceding tagged profile; Git parent
+  57ba83e includes the later credits-only change. Existing profile history is kept.
 
 ### 2026-10-19 — source credits at the bottom of the README
 
@@ -1897,6 +2150,7 @@ editor plugin commits; optional tools are identified separately below.
 | Cursor motion | smear-cursor.nvim terminal trail; Space u c toggle; typing/tool panes quiet; Neovide skipped |
 | Reading conveniences | Relative lines, centered movement, yank feedback, restored position, open-by-default folds, Markdown wrap/spell |
 | External file changes | Guarded checktime with autoread for unmodified buffers |
+| Local event rules | Described, grouped autocommands; NvChad horizontal terminals preserve height |
 
 ### Installed language and debug tools
 
@@ -1946,7 +2200,8 @@ separately named grammar.
 OpenSuperWhisper, Obsidian vault integration, additional language SDKs/framework
 servers and additional debug adapters. The Kun core tools are installed;
 registration/gate setup happens separately for each project when you run `kun`.
-No paid worker pipeline has been run during installation.
+No paid worker pipeline has been run during installation. Herdr and Lotus were
+compared as optional tools; neither is installed or required by this profile.
 
 ### Complete locked editor-plugin inventory
 
@@ -1975,7 +2230,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Current full-profile checkpoint | setup-2026-10-19-readme |
+| Current full-profile checkpoint | setup-2026-10-19-videos |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not
@@ -1990,8 +2245,14 @@ documentation; AGENTS.md is a brief repository instruction pointer.
 - [Mental Outlaw](https://www.youtube.com/watch?v=yW3ovyQCwpw)
 - [Andrew Courter](https://www.youtube.com/watch?v=xUnXcVxcJho) / [exosyphon](https://github.com/exosyphon/dotfiles)
 - [Kun Chen](https://www.youtube.com/watch?v=iQyg-KypKAA) / [kunchenguid](https://github.com/kunchenguid/firstmate)
+- [typecraft](https://www.youtube.com/watch?v=J9yqSdvAKXY) / [cpow](https://github.com/cpow/cpow-dotfiles)
 - [Magicalbat](https://github.com/Magicalbat/Configs)
 - [sphamba](https://github.com/sphamba/smear-cursor.nvim) — cursor-animation plugin
+
+Additional comparison sources (tools left optional):
+
+- [Jilles](https://www.youtube.com/watch?v=qnIu-Xu64H0) — Herdr
+- [Fanxy](https://www.youtube.com/watch?v=WZ9SPo_rnVU) / [Fanxy13](https://github.com/Fanxy13/homebrew-lotus) — Lotus
 
 The NvChad starter's original public-domain license is retained. Plugin and
 external-tool licenses remain with their projects; installed dependencies are
