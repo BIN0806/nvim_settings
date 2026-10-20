@@ -1,6 +1,6 @@
 # Documentation
 
-**Billy's Neovim, tmux and Codex setup — updated October 19, 2026.**
+**Billy's Neovim, tmux and Codex setup — updated October 20, 2026.**
 
 This is the single user guide and change log for the setup. Start with the quick
 reference, then read the category you need. It assumes you have not watched the
@@ -237,6 +237,21 @@ wraps that one callback to skip recording/replay and leaves ordinary completion
 initialization intact. No completion shortcuts changed. Re-run the course’s
 Insert-mode macro regression when updating nvim-cmp; the guard explicitly checks
 that the reviewed callback still exists.
+
+The course now marks differences directly before the affected instructions:
+**CHANGED FOR YOUR SETUP** explains the original action and replacement;
+**ALREADY BOUND** identifies installed mappings; **BINDING NEEDED** identifies
+an optional shortcut that has not been assigned. The underlying colon command
+still works. Each optional recipe is commented Lua with its config location,
+mode, keys, prerequisites and save/restart instructions. Native Vim motions and
+commands are explicitly distinguished from custom mappings.
+
+The optional examples use Space l r to reload a saved Lua experiment and
+Space l h to run CourseHello after loading the demo. They are not installed;
+choose them only if you want those extra shortcuts. The course README includes
+a linked original-versus-current comparison and the comment legend. Keep this
+annotation style when adding future instructions that need a new binding.
+Existing exercise-0 annotations were merged with a backup and no reset of progress.
 
 The local course retains upstream history at `aed0a14`; Billy’s changes are on
 `codex/billy-keybindings`. Its navigation fixtures are a separate ignored clone
@@ -2222,6 +2237,31 @@ Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
 
+### 2026-10-20 — show course differences and commented binding recipes
+
+- **Scope/profile:** documentation follow-up for the full profile. The editor
+  checkpoint remains `setup-2026-10-20-vim-learning`; no key mappings changed.
+- **Changed/why:** add visible comments before adapted course instructions,
+  separating changed behavior, existing mappings and optional unbound shortcuts.
+  Include commented Lua recipes for the optional saved-Lua reload and CourseHello
+  actions, plus recovery definitions for installed explorer/quickfix/find-repeat
+  keys. Add an original-versus-current comparison to the course README.
+- **Use:** read the callout before an instruction. A Binding needed note explains
+  the command fallback and optional shortcut; copy only a recipe you want into
+  the active lua/mappings.lua, uncomment its mapping lines, save and restart.
+  Built-in Vim commands need no custom map. Current required course keys remain installed.
+- **Validation:** 31 lesson pairs remain synchronized; course links, launcher,
+  progress/reset checks and code fences pass. All seven Lua examples parse,
+  including six commented binding recipes. Optional keys are unassigned in the
+  installed full profile; temporary mappings successfully reload a saved Lua
+  experiment and execute its command. Existing course aliases match the comments.
+  Settings documentation/parser and diff-whitespace checks pass. No plugin
+  or editor behavior changed; the prior 13 integration checks remain historical.
+- **Restore:** the previous local course checkpoint is `course-2026-10-20-billy`;
+  annotated lessons are saved separately as `course-2026-10-20-notes`. Existing
+  practice edits were preserved, with the updated copy backed up first. Published
+  settings tags retain their original commits.
+
 ### 2026-10-20 — adapt ThePrimeagen’s course to the installed shortcuts
 
 - **Profile/checkpoint:** full; `setup-2026-10-20-vim-learning`.
@@ -2617,7 +2657,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Local Vim course | vim learning/vim; course-2026-10-20-billy checkpoint |
+| Local Vim course | vim learning/vim; course-2026-10-20-notes checkpoint |
 | Current full-profile checkpoint | setup-2026-10-20-vim-learning |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
