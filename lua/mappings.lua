@@ -5,6 +5,13 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "Enter command mode" })
 map("i", "jk", "<Esc>", { desc = "Leave insert mode" })
 
+-- Course-compatible aliases: keep semicolon command entry and pane navigation.
+map("n", "<leader>;", ";", { desc = "Repeat last character find" })
+map("n", "]q", "<cmd>cnext<CR>", { desc = "Next quickfix result" })
+map("n", "[q", "<cmd>cprev<CR>", { desc = "Previous quickfix result" })
+map("n", "<leader>qo", "<cmd>copen<CR>", { desc = "Open quickfix list" })
+map("n", "<leader>qc", "<cmd>cclose<CR>", { desc = "Close quickfix list" })
+
 map("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>", { desc = "Window / tmux left" })
 map("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>", { desc = "Window / tmux down" })
 map("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>", { desc = "Window / tmux up" })

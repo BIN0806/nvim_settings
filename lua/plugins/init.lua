@@ -1,5 +1,11 @@
 return {
   {
+    "hrsh7th/nvim-cmp",
+    config = function(_, opts)
+      require("configs.completion").setup(opts)
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = { "mason-org/mason.nvim" },

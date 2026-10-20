@@ -17,6 +17,7 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | --- | --- |
 | Start working or find a common shortcut | [Quick start](#quick-start) |
 | Open the home screen | [Home dashboard](#home-dashboard) |
+| Practice ThePrimeagen’s course with your actual shortcuts | [Learn Vim with this setup](#learn-vim-with-this-setup) |
 | Learn modes, navigation and editing | [Editing and navigation](#editing-and-navigation) |
 | Use completion, formatting, builds and the debugger | [Languages, formatting and debugging](#languages-formatting-and-debugging) |
 | Review changes, arrange windows or use tmux | [Git review, layouts and tmux](#git-review-layouts-and-tmux) |
@@ -175,6 +176,73 @@ Colon commands finish with Enter. Commands such as `cmake`, `git` and `npm`
 belong in a terminal. Space shortcuts belong in Neovim's Normal mode. tmux uses
 its separate Ctrl+s prefix. The same key can mean different things in different
 programs, so check which pane and mode have focus.
+
+### Learn Vim with this setup
+
+ThePrimeagen’s [vim-fundamentals](https://github.com/ThePrimeagen/vim-fundamentals)
+is cloned locally as **vim**, inside **vim learning**:
+
+```sh
+cd "/Users/billy/Documents/ChatGPT/HATE/vim learning/vim"
+./learn
+```
+
+Use your normal `nvim` configuration. Start with `./learn lesson basic-usage`,
+then `./learn 0`; progress through exercises 1–6 as the readings introduce them.
+`./learn list` shows all 31 lessons in course order. The course README has the
+full index and adaptation notes. There is no website build to install.
+
+| From the course folder | What you can do |
+| --- | --- |
+| `./learn 0` through `./learn 6` | Work on a writable copy and keep your progress between sessions. |
+| `./learn reset 0` | Reset that exercise after backing up your previous copy in .practice/backups/. |
+| `./learn js` | Practice on the JavaScript example; `./learn reset js` also backs up edits. |
+| `./learn lesson NAME` | Read a named reference lesson; use `./learn list` to find names. |
+| `./learn nav` | Open the prepared vim-nav-playground project for explorer, marks and quickfix lessons. |
+| `./learn plugin` | Edit a local Lua demo; `:luafile %` loads it and `:CourseHello` runs it. |
+
+The launcher makes practice copies under `.practice/`. It keeps Markdown/ASCII
+exercises literal by disabling format-on-save, wrap, spell display, concealment
+and folding in course buffers. Reference lessons are read-only; the copies are
+writable. These overrides belong to the launched Neovim process. Opening course
+files directly with `nvim` does not load that course helper automatically.
+
+Both lesson trees teach your actual tools: **nvim-tree** instead of NetRW,
+**Lazy/Telescope** instead of Vim-Plug/FZF, and Lua modules instead of replacing
+an init.vim. The course’s Ctrl+j/k quickfix maps would replace window navigation;
+use the following installed aliases throughout your normal editor instead:
+
+| Action, in Normal mode | Keys |
+| --- | --- |
+| Repeat the last f/F/t/T character search | `Space ;` repeats; comma reverses the search. |
+| Next / previous quickfix entry | ]q / [q |
+| Open / close the quickfix window | Space q o / Space q c |
+
+Your existing semicolon still opens command mode, Ctrl+h/j/k/l still navigates
+windows/tmux, and Visual p preserves the copied register. Those differences are
+explained in the relevant lessons. Quickfix needs results first; `./learn nav`
+and `:vimgrep /SOCKET_OPEN/gj src/*.c` supply a working example. Use `:cfirst`
+if you want to start at the first result before trying ]q.
+
+**Practice workflow:** read one short lesson, do its exercise, use u to retry a
+change, and save with :w. Add one motion at a time to real coding. Learn operators
+with motions (`dw`, `ciw`, `di{`) before memorizing more plugins. Use `:help` for
+the command under study, and check mode/case before assuming a key is broken.
+Save and restart existing Neovim sessions to load the five new global mappings.
+
+The pinned completion plugin also needed a compatibility guard: its InsertEnter
+callback injected keys even when completion was disabled for a recording macro,
+which could lose inserted text from the macro register. `lua/configs/completion.lua`
+wraps that one callback to skip recording/replay and leaves ordinary completion
+initialization intact. No completion shortcuts changed. Re-run the course’s
+Insert-mode macro regression when updating nvim-cmp; the guard explicitly checks
+that the reviewed callback still exists.
+
+The local course retains upstream history at `aed0a14`; Billy’s changes are on
+`codex/billy-keybindings`. Its navigation fixtures are a separate ignored clone
+at `7d58a0d`. The settings repository records the new mappings and this guide;
+the course is a separate local repository, not an uploaded fork. Restoring a
+settings tag does not reset your course progress or switch that course branch.
 
 ### Autocommands you can control
 
@@ -1257,7 +1325,8 @@ Do not copy a second `.git` directory into the existing NvChad starter checkout.
 | `setup-2026-10-19-readme` | Full profile with the unified guide displayed as README.md on GitHub. |
 | `setup-2026-10-19-videos` | Full profile with scoped terminal-height behavior, inspectable autocommands and the additional video comparisons. |
 | `setup-2026-10-19-kun-routing` | Full profile with persistent worker-routing preferences and the Kun follow-up audit. |
-| `setup-2026-10-19-dashboard` | Current full profile with the startup dashboard and Space u d home shortcut enabled. |
+| `setup-2026-10-19-dashboard` | Full profile with the startup dashboard and Space u d home shortcut enabled. |
+| `setup-2026-10-20-vim-learning` | Current full profile with course-compatible shortcuts and Insert-mode macro protection. |
 
 The initial commits package saved, tested milestones in order. Tags pin exact
 snapshots; profile branches can receive compatible updates. The smaller C++
@@ -2094,6 +2163,30 @@ availability; this was not a live exercise of a secondmate fleet, browser task,
 public relay or paid model pipeline. The core installed integration results from
 October 18 remain historical evidence where not explicitly rerun here.
 
+### Vim learning verification — October 20, 2026
+
+The local course’s `.learning/check.py` checks all 31 mirrored lessons, local
+links, launch targets, retained progress, backed-up resets and plugin-demo edits
+using a temporary course copy. Its `.learning/check.lua` runs with the installed
+configuration: word edits/undo/redo, counts, jk, Space ;/comma, registers/Visual p,
+macros/substitution, delimiter/text objects, cross-file marks, quickfix/pane
+navigation, explorer actions, real Telescope results, unformatted ASCII saves
+and the local Lua command. The 13 checks also record/replay inserted text and
+confirm ordinary completion initialization still runs. Run these from the course directory:
+
+```sh
+python3 .learning/check.py
+./learn plugin --print
+nvim --headless -i NONE -n -c 'luafile .learning/check.lua'
+```
+
+The runtime check requires the installed plugins and existing navigation
+fixtures. It is an integration check for this Mac’s full profile, not a promise
+that a shortcut works without a suitable mode/file/search context. It does not
+start agents or call a model. Only the changed mappings, plugin declaration and
+completion module were synchronized; the independently adjusted local cursor
+preset was preserved.
+
 ### Reproduce the relevant checks
 
 From the settings clone, `python3 scripts/check.py` parses Lua/Python/JSON and
@@ -2128,6 +2221,31 @@ required for a small documentation edit. Results/logs are ignored local files.
 Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
+
+### 2026-10-20 — adapt ThePrimeagen’s course to the installed shortcuts
+
+- **Profile/checkpoint:** full; `setup-2026-10-20-vim-learning`.
+- **Changed/why:** add Space ; for character-find repeat, ]q/[q for quickfix
+  navigation, and Space q o/q c for its window. Guard nvim-cmp’s InsertEnter
+  callback during macros to preserve recorded Insert-mode text. Preserve semicolon
+  command entry and Ctrl+h/j/k/l pane navigation. Clone vim-fundamentals as vim under the local
+  vim learning folder; adapt both lesson trees for NvChad/Lua/Lazy/Telescope and
+  provide a launcher with writable exercise copies, reset backups and literal
+  diagram presentation. The navigation fixture clone stays separate and ignored.
+- **Use:** save and restart Neovim, then follow [Learn Vim with this setup](#learn-vim-with-this-setup).
+  Launch `./learn 0` through `./learn 6`, `./learn nav`, `./learn js` or
+  `./learn plugin` from the course folder; ordinary reopening retains progress.
+- **Validation:** course structure/launcher checks and 13 installed-config runtime
+  checks pass, including actual edits, Insert-mode macro recording/replay with
+  normal completion initialization retained, quickfix results, explorer/pickers
+  and a whitespace-preserving save. The macro also passes through real terminal
+  input. Settings Lua/Python/JSON, README links, formatting and diff whitespace
+  checked. Changed Lua files match active/source/export;
+  unrelated local cursor settings remain untouched. No plugin installs or model calls.
+- **Restore:** the preceding settings checkpoint is `setup-2026-10-19-dashboard`.
+  Course adaptations are local commit ceeaf9c on codex/billy-keybindings;
+  upstream master remains intact. Course progress/backups are ignored personal
+  files and are not restored by settings tags. Existing profiles/tags are unchanged.
 
 ### 2026-10-19 — enable the home dashboard
 
@@ -2494,11 +2612,13 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Profile metadata | profile.json |
 | Optional tmux settings | tmux.conf, installed separately as ~/.tmux.conf |
 | Cursor settings | lua/configs/cursor.lua |
+| Completion macro compatibility | lua/configs/completion.lua |
 | Optional Kun sources | agentic/; reviewed versions in agentic/toolchain-lock.json |
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Current full-profile checkpoint | setup-2026-10-19-dashboard |
+| Local Vim course | vim learning/vim; course-2026-10-20-billy checkpoint |
+| Current full-profile checkpoint | setup-2026-10-20-vim-learning |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
 commits are locked; separately managed SDKs, accounts and private state are not
@@ -2507,6 +2627,7 @@ documentation; AGENTS.md is a brief repository instruction pointer.
 
 ### Sources and credits
 
+- [ThePrimeagen](https://github.com/ThePrimeagen/vim-fundamentals) — Vim fundamentals course and [navigation playground](https://github.com/ThePrimeagen/vim-nav-playground)
 - [Dreams of Code](https://www.youtube.com/watch?v=lsFoZIg-oDs) / [dreamsofcode-io](https://github.com/dreamsofcode-io/neovim-cpp)
 - [Average Neovim Enjoyer](https://www.youtube.com/watch?v=w0WzxUPtKf0)
 - [The Rad Lectures](https://www.youtube.com/watch?v=lljs_7xB7Ps) / [radleylewis](https://github.com/radleylewis/nvim-lite)
