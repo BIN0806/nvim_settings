@@ -253,11 +253,14 @@ a linked original-versus-current comparison and the comment legend. Keep this
 annotation style when adding future instructions that need a new binding.
 Existing exercise-0 annotations were merged with a backup and no reset of progress.
 
-The local course retains upstream history at `aed0a14`; Billy’s changes are on
-`codex/billy-keybindings`. Its navigation fixtures are a separate ignored clone
-at `7d58a0d`. The settings repository records the new mappings and this guide;
-the course is a separate local repository, not an uploaded fork. Restoring a
-settings tag does not reset your course progress or switch that course branch.
+The course is published separately in
+[BIN0806/nvim_learning](https://github.com/BIN0806/nvim_learning) on main, with
+`codex/billy-keybindings` retaining the working branch. Its README includes
+fresh-clone instructions and source credits at the bottom. Original source is
+preserved at `source-vim-fundamentals-aed0a14`; the published course checkpoint is
+`course-2026-10-20-published`. The navigation fixtures remain a separate ignored
+clone at `7d58a0d`. Personal practice files and backups stay local. Restoring a
+settings tag does not reset course progress or switch that repository’s branch.
 
 ### Autocommands you can control
 
@@ -2237,6 +2240,27 @@ Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
 
+### 2026-10-20 — publish the credited Vim learning template
+
+- **Scope/profile:** course publication and documentation only. The editor
+  checkpoint remains `setup-2026-10-20-vim-learning`.
+- **Changed/why:** publish the annotated course to BIN0806/nvim_learning with main,
+  its working branch, source snapshot tag and existing course checkpoints. Add
+  portable clone/fixture instructions and bottom-of-README author/source credits;
+  retain the upstream history, attribution and licenses.
+- **Use:** clone the learning repository, follow its README and use ./learn.
+  Navigation lessons require the separately cloned pinned playground; custom
+  editor shortcuts require this full Neovim profile. Practice progress/backups
+  remain local and ignored.
+- **Validation:** course mirrored lessons, links, launcher/progress/reset behavior
+  and whitespace checks pass. Published refs and a fresh remote checkout were
+  verified.
+  Settings documentation/parser checks pass; no editor mappings or plugins changed.
+- **Restore:** `course-2026-10-20-published` identifies the published course;
+  `course-2026-10-20-notes` retains the preceding annotated checkpoint and
+  `source-vim-fundamentals-aed0a14` identifies the original course. Existing
+  published settings and course tags remain unchanged.
+
 ### 2026-10-20 — show course differences and commented binding recipes
 
 - **Scope/profile:** documentation follow-up for the full profile. The editor
@@ -2657,7 +2681,7 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Installed Kun command | ~/.local/bin/kun |
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
-| Local Vim course | vim learning/vim; course-2026-10-20-notes checkpoint |
+| Vim learning course | [nvim_learning](https://github.com/BIN0806/nvim_learning); course-2026-10-20-published |
 | Current full-profile checkpoint | setup-2026-10-20-vim-learning |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
