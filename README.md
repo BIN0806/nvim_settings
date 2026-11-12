@@ -1,6 +1,6 @@
 # Documentation
 
-**Billy's Neovim, tmux and Codex setup — updated October 20, 2026.**
+**Billy's Neovim, tmux and Codex setup.**
 
 This is the single user guide and change log for the setup. Start with the quick
 reference, then read the category you need. It assumes you have not watched the
@@ -10,6 +10,11 @@ and restore points are kept together here.
 **Current profile:** `main` is the full daily setup. `codex/profile-cpp` is the
 smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 **Assistant default:** Codex. **Cursor effect:** Space u c toggles it.
+
+Use this repo for the standalone editor profile. The companion [macOS dotfiles](https://github.com/BIN0806/dotfiles)
+manage the terminal profiles, shell assistance, and a Neovim snapshot with Kun's optional tools.
+The [Vim course](https://github.com/BIN0806/nvim_learning) and [Codex skills](https://github.com/BIN0806/agent-skills)
+have their own setup guides.
 
 ## Contents
 
@@ -22,6 +27,7 @@ smaller C++ profile. **Editor leader:** Space. **tmux prefix:** Ctrl+s.
 | Use completion, formatting, builds and the debugger | [Languages, formatting and debugging](#languages-formatting-and-debugging) |
 | Review changes, arrange windows or use tmux | [Git review, layouts and tmux](#git-review-layouts-and-tmux) |
 | Control the flying cursor and extra shortcuts | [Cursor effects and extra controls](#cursor-effects-and-extra-controls) |
+| See which settings come from the Mac dotfiles | [macOS dotfiles and terminal choices](#macos-dotfiles-and-terminal-choices) |
 | Work with an assistant or initialize a project harness | [Coding with Codex and Kun](#coding-with-codex-and-kun) |
 | Decide whether Herdr or Lotus adds anything to Firstmate | [Firstmate, Herdr and Lotus](#firstmate-herdr-and-lotus) |
 | Check Kun’s advanced and full-stack workflows | [Kun workflow coverage and everyday commands](#kun-workflow-coverage-and-everyday-commands) |
@@ -746,7 +752,8 @@ is pinned in lazy-lock.json. This is a substitute for the requested visual effec
 not an animation copied from his repository.
 
 Restart Neovim. In Normal mode, try `gg`, `G`, a search jump or movement across a
-line. The cursor leaves a short trail as it travels. **Space u c** or
+line. The standalone profile draws a short trail. The Mac dotfiles snapshot uses
+the same plugin with a smooth rectangular block. **Space u c** or
 `:SmearCursorToggle` turns it off/on for the current session. The options are in
 `lua/configs/cursor.lua`; set `enabled = false` there to start with it disabled.
 It uses a Catppuccin-compatible color, ordinary block glyphs and a moderate frame
@@ -1329,6 +1336,23 @@ separate profile. Once you decide to use this as your default, close Neovim,
 back up that directory and deliberately replace it with a clone of this repo.
 Do not copy a second `.git` directory into the existing NvChad starter checkout.
 
+### macOS dotfiles and terminal choices
+
+The [dotfiles repo](https://github.com/BIN0806/dotfiles) has the Homebrew WezTerm
+install and macOS migration instructions. WezTerm is installed alongside iTerm2
+on the reviewed Mac, with Rosé Pine Moon, Hack Nerd Font at 15 pt, blur and focus
+dimming. This standalone profile still uses Catppuccin in either terminal.
+[WezTerm instructions](https://github.com/BIN0806/dotfiles#wezterm-without-nix).
+
+| Feature | Where it is configured |
+| --- | --- |
+| Gray command-history suggestions, `Ctrl+F` / Right Arrow, and shell syntax highlighting | The Zsh loader in the dotfiles. Load it in the current shell or follow the persistent setup instructions. |
+| Smooth rectangular Neovim cursor | The Mac dotfiles snapshot. This standalone profile has its own trail tuning and the same `Space u c` toggle. |
+| Oil, Snacks pickers, Neogit, inline Git blame toggle, and select-all alias | The dotfiles Neovim snapshot. The dotfiles README lists those extra keys. |
+| NvChad dashboard, Telescope, NvimTree, Diffview, LazyGit, language tools, and Kun launcher | Both Neovim profiles. The lockfiles and shortcuts in each checkout describe what that checkout provides. |
+
+[Shell instructions](https://github.com/BIN0806/dotfiles#terminal-suggestions) · [Kun's additional editor keys](https://github.com/BIN0806/dotfiles#kuns-neovim-tools)
+
 ### Choose a profile or exact snapshot
 
 | Selection | What it contains |
@@ -1634,10 +1658,10 @@ delegate implementation, validate behavior, and isolate independent tasks.
 
 | Layer in the video | Your available implementation | Status / difference |
 | --- | --- | --- |
-| WezTerm + tmux + Neovim | Existing terminal + improved tmux + NvChad | Installed workflow; no terminal-emulator migration. |
+| WezTerm + tmux + Neovim | WezTerm or iTerm2 + tmux + NvChad | WezTerm is installed separately through the Mac dotfiles. |
 | Claude Code, Codex, OpenCode, Pi | Assistant chooser and direct launch keys | First three CLIs resolve; Pi remains optional. |
 | Global/project memory | Existing instructions preserved; project-context template supplied | Template is available; no global memory overwritten. |
-| Skills | Existing instruction packs preserved; No Mistakes bundled skill installed | No bulk third-party skill installation. |
+| Skills | No Mistakes bundled skill and the optional [agent-skills collection](https://github.com/BIN0806/agent-skills) | Install selected skills per project. |
 | OpenSuperWhisper | Typing, or existing macOS Dictation | Dedicated local voice tool remains optional. |
 | AXI and Lavish planning | Tasks, Lavish, GitHub, Chrome DevTools and quota AXI installed privately | Available to Firstmate; browser tools still need a suitable browser session. |
 | No Mistakes | v1.84.0 installed; per-project gate configured by kun | GitHub projects default to gated PR delivery; local projects use local-only. Merge approval required. |
@@ -1813,7 +1837,7 @@ job to one tool. These are deliberate substitutions, not missing installations.
 | CoC | Native LSP + nvim-cmp + LuaSnip | Already supplies completion, definitions, references, rename and actions. |
 | blink.cmp | nvim-cmp | Keep NvChad's integrated completion stack; running both would duplicate menus and mappings. |
 | null-ls / none-ls / efm formatting | Conform + formatter executables | One formatter path, project configuration support, format on save. Ruff and language servers handle the selected diagnostics. |
-| NERDTree | nvim-tree | One file explorer. |
+| NERDTree | nvim-tree | Default tree explorer. The Mac dotfiles also expose Oil on its own key. |
 | fzf.vim / fzf-lua | Telescope | Same file/text/buffer/history search workflows with existing keys. LazyGit handles broader Git operations. |
 | ALE | clangd, Pyright, Ruff, TypeScript, Bash/ShellCheck | Diagnostics come from language-specific tools without another overlapping client. This is not a claim to support every ALE linter. |
 | Airline / custom statusline / lualine | NvChad statusline | One statusline and one theme owner. |
@@ -1821,7 +1845,7 @@ job to one tool. These are deliberate substitutions, not missing installations.
 | vim-surround | mini.surround | Surround editing with a single mapping set. |
 | mini.pairs / mini.comment / mini.icons / mini.notify | Existing pairs, comments, icons and notifications | Avoid replacing working NvChad defaults for duplicate features. |
 | Nord / Melange / Rose Pine / multiple tmux themes | Catppuccin in Neovim, matching tmux palette | Visual coherence; one active theme at a time. Use Space t h to explore editor themes later. |
-| WezTerm | Your existing terminal + tmux | The editor/pane/agent workflow works in your current terminal. WezTerm remains an optional terminal-emulator alternative. |
+| WezTerm | Separate WezTerm install or iTerm2 with tmux | Both terminals run this editor and tmux setup. The WezTerm profile lives in the Mac dotfiles. |
 
 Radley's [current source](https://github.com/radleylewis/nvim-lite) has evolved
 since his recording. It includes later Rust/Obsidian additions and notes paths
@@ -2240,6 +2264,15 @@ Each entry records changes, use, actual verification and a restore point.
 The first three commits packaged saved, tested milestones on October 18, 2026;
 their packaging times are not represented as original development timestamps.
 
+### 2026-11-11 — documentation sync with the Mac dotfiles
+
+- Documented the separate WezTerm installation, terminal assistance, and optional
+  Oil, Snacks and Neogit bindings in the companion dotfiles snapshot.
+- Verified this guide's anchors and settings syntax with `python3 scripts/check.py`.
+- Kept the standalone editor checkpoint at `setup-2026-10-20-vim-learning`.
+  Use the current README for companion-repo instructions and the checkpoint
+  to restore the standalone editor config.
+
 ### 2026-10-20 — publish the credited Vim learning template
 
 - **Scope/profile:** course publication and documentation only. The editor
@@ -2569,7 +2602,7 @@ editor plugin commits; optional tools are identified separately below.
 | Distribution | NvChad v2.5 | Coherent defaults, statusline, buffer line and terminal UI. |
 | Home screen | Built-in NvChad Nvdash | Startup menu and Space u d; explicit file launches open directly. |
 | Theme | Catppuccin via NvChad/base46 | Editor colors; matching static tmux palette. |
-| Font | Existing MesloLGS NF terminal font | Icons; other installed Nerd Fonts remain available. |
+| Font | Hack Nerd Font at 15 pt in the WezTerm profile; terminal-specific in iTerm2 | Icons and terminal glyphs. |
 | Plugin management | lazy.nvim + lazy-lock.json | Plugin loading and recorded revisions. |
 | Tool management | Mason | Selected external language/debug executables. |
 | File navigation | nvim-tree, Telescope, ripgrep/fd | Explorer, file search, project text search and pickers. |
@@ -2595,7 +2628,7 @@ editor plugin commits; optional tools are identified separately below.
 | Full Git terminal interface | LazyGit |
 | Focus view | zen-mode.nvim |
 | Indent guides/icons | indent-blankline.nvim + nvim-web-devicons |
-| Cursor motion | smear-cursor.nvim terminal trail; Space u c toggle; typing/tool panes quiet; Neovide skipped |
+| Cursor motion | smear-cursor.nvim terminal trail in this profile; the Mac dotfiles use a smooth block. Space u c toggles both. |
 | Reading conveniences | Relative lines, centered movement, yank feedback, restored position, open-by-default folds, Markdown wrap/spell |
 | External file changes | Guarded checktime with autoread for unmodified buffers |
 | Local event rules | Described, grouped autocommands; NvChad horizontal terminals preserve height |
@@ -2627,7 +2660,7 @@ separately named grammar.
 
 | Layer | Installed / active selection |
 | --- | --- |
-| Terminal emulator | Your existing macOS terminal; no WezTerm migration |
+| Terminal emulator | iTerm2 and separate WezTerm with Kun's profile from the Mac dotfiles |
 | Terminal multiplexer | tmux 3.8; Ctrl+s prefix, vi copy mode, mouse, clipboard, splits and pane navigation |
 | Cross-editor/pane navigation | vim-tmux-navigator in Neovim and tmux |
 | tmux plugin manager | TPM |
@@ -2646,7 +2679,7 @@ separately named grammar.
 | Agent tool interfaces | gh-axi 0.1.43, chrome-devtools-axi 0.1.44, tasks-axi 0.2.6, quota-axi 0.1.64, lavish-axi 0.1.90 |
 | Permission posture | Codex workspace-write / on-request; merge approval required; no unattended loop enabled |
 
-**Optional and not activated:** Pi, WezTerm migration, gnhf unattended loops,
+**Optional and not activated:** Pi, gnhf unattended loops,
 OpenSuperWhisper, Obsidian vault integration, additional language SDKs/framework
 servers and additional debug adapters. The Kun core tools are installed;
 registration/gate setup happens separately for each project when you run `kun`.
@@ -2682,6 +2715,8 @@ smear-cursor.nvim, vim-tmux-navigator, volt, which-key.nvim, zen-mode.nvim
 | Private Kun tools and state | ~/.local/share/kun |
 | Practice project | example/ |
 | Vim learning course | [nvim_learning](https://github.com/BIN0806/nvim_learning); course-2026-10-20-published |
+| macOS terminal and editor snapshot | [dotfiles](https://github.com/BIN0806/dotfiles) |
+| Optional project skills | [agent-skills](https://github.com/BIN0806/agent-skills) |
 | Current full-profile checkpoint | setup-2026-10-20-vim-learning |
 
 Installed language/debug/CLI versions above describe the reviewed setup. Plugin
